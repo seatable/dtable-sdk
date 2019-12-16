@@ -6,14 +6,13 @@ import Debug from 'debug';
 const debug = Debug('dtable:say-hello');
 const configPath = path.resolve(__dirname, './example.json');
 const config = JSON.parse(fs.readFileSync(configPath).toString());
-const { APIToken, server, workspaceID, dtableName, lang } = config;
+const { APIToken, server, workspaceID, dtableName } = config;
 
 let dtableConfig = {
   server: server.replace(/\/+$/, ""),
   APIToken,
   workspaceID,
   dtableName,
-  lang,
 };
 
 class Test {

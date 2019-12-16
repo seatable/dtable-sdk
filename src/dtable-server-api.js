@@ -10,7 +10,7 @@ class DTableServerAPI {
   getTableData() {
     const { dtableServer, dtableUuid, accessToken, lang } = this.config;
     const url = dtableServer + 'dtables/' + dtableUuid;
-    return this.req.get(url, { headers: { 'Authorization': 'Token ' + accessToken }, params: { lang: lang} });
+    return this.req.get(url, { headers: { 'Authorization': 'Token ' + accessToken }, params: { lang: lang || 'en'} });
   }
 
 }
