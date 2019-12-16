@@ -27,13 +27,12 @@ class Test {
       let name = row['Name'];
       const res = `Hello ${name}`;
       if (row['Result'] && row['Result'].text === res) {
-        debug(row['Result'].text, res);
         return;
       }
       let updated = {};
       updated['Result'] = res;
       dtable.modifyRow(table, row, updated);
-      debug('change row data success');
+      debug('Change row succeeded.');
     });
   }
 }
