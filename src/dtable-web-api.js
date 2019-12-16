@@ -9,7 +9,7 @@ class DTableWebAPI {
 
   getDTableAccessToken() {
     const { server, APIToken } = this.config;
-    const url = server + '/api/v2.1/dtable/app-access-token/'
+    const url = server + '/api/v2.1/dtable/app-access-token/';
     const headers = { 'Authorization': 'Token ' + APIToken };
     return this.req.get(url, { headers:  headers });
   }
@@ -19,7 +19,7 @@ class DTableWebAPI {
     const url = server + '/api/v2.1/dtable/app-upload-link/';
     const headers = { 'Authorization': 'Token ' + APIToken };
     const params = { workspace_id: workspaceID, name: dtableName };
-    return this.req.get(url,{ headers: headers, params: params });
+    return this.req.get(url, { headers: headers, params: params });
   }
 
 }
