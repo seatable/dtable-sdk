@@ -19,13 +19,16 @@ class DTable {
 
   async init(config) {
     this.dtableWebAPI = new DTableWebAPI(config);
-    this.dtableServerAPI = new DTableServerAPI(config);
     this.config = config;
 
     try {
       let res = await this.dtableWebAPI.getDTableAccessToken();
-      this.config.accessToken = res.data.access_token;
-      this.config.dtableUuid = res.data.dtable_uuid;
+      const { access_token, dtable_uuid, dtable_server, dtable_socket } = res.data;
+      this.config.accessToken = access_token;
+      this.config.dtableUuid = dtable_uuid;
+      this.config.dtableServer = dtable_server.replace(/\/+$/, "") + "/";
+      this.config.dtableSocket = dtable_socket.replace(/\/+$/, "") + "/";
+      this.dtableServerAPI = new DTableServerAPI(this.config);
       this.dtableStore = new DtableStore(this.config);
       this.eventBus = this.dtableStore.eventBus;
     } catch(err) { 

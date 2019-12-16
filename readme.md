@@ -26,16 +26,13 @@ Then generate APIToken and change example/example.json file just like below.
 {
     "APIToken": "xxxxxxxx",
     "server": "http://127.0.0.1:8001",
-    "dtableServer": "http://127.0.0.1:5000/",
-    "dtableSocket": "http://127.0.0.1:5000/",
     "workspaceID": "xxxxxxxx",
     "dtableName": "xxxxxxxx",
-    "lang": "en",
     "licenseGeneratorToken": "xxxxxxxx"
-} 
+}
 ~~~
 
-Run `npm run example ` and wait for a few secones, you will see result column is changed.
+Run `npm run example` and wait for a few secones, you will see result column is changed.
 
 | Name | Result     |
 | ---- | ---------- |
