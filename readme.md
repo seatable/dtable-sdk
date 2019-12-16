@@ -1,7 +1,43 @@
-# dtable-sdk 环境使用说明
+# dtable-sdk
 
-## 运行环境说明
+SDK for dtable.
 
-1. 安装依赖项, 执行`npm install` 安装当前项目的配置项
-2. 创建对应应用的 DTable
-3. 创建对应的配置文件
+## Basic demo
+
+Using npm
+
+
+~~~bash
+npm install
+~~~
+
+Prepare a test dtable, just like:
+
+| Name | Result |
+| ---- | ------ |
+| Mike |        |
+| Judy |        |
+
+You shoule create a dtable with the table name 'sayHello' and view name 'Default_View'. Then add a new long text column named 'Result'. Add a few rows and enter some names.
+
+Then generate APIToken and change example/example.json file just like below.
+
+~~~json
+{
+    "APIToken": "xxxxxxxx",
+    "server": "http://127.0.0.1:8001",
+    "dtableServer": "http://127.0.0.1:5000/",
+    "dtableSocket": "http://127.0.0.1:5000/",
+    "workspaceID": "xxxxxxxx",
+    "dtableName": "xxxxxxxx",
+    "lang": "en",
+    "licenseGeneratorToken": "xxxxxxxx"
+} 
+~~~
+
+Run `npm run example ` and wait for a few secones, you will see result column is changed.
+
+| Name | Result     |
+| ---- | ---------- |
+| Mike | Hello Mike |
+| Judy | Hello Judy |
