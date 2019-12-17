@@ -37,12 +37,8 @@ class DTable {
     };
   }
 
-  async loadFromServer() {
+  async syncWithServer() {
     await this.dtableStore.loadFromServer();
-    this.eventBus.dispatch('dtable-data-loaded');
-  }
-
-  syncWithServer() {
     this.dtableStore.syncWithServer();
     this.updateDTableAccessToken();
   }

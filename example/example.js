@@ -44,8 +44,7 @@ async function init() {
   await dtable.init(dtableConfig);
   dtable.subscribe('dtable-connect', () => { test.sayHello(); });
   dtable.subscribe('dtable-data-changed', () => { test.sayHello(); });
-  await dtable.loadFromServer();
-  dtable.syncWithServer();
+  await dtable.syncWithServer();
 }
 
 init();
