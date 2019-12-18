@@ -13,7 +13,7 @@ function convertRow(table, row) {
           break;
         case 'single-select':
           if (!column.data) {
-            // a single-select column with no options
+            debug(`No options found`);
             break;
           }
           let options = column.data.options;
@@ -43,9 +43,6 @@ function convertRowBack(table, row) {
         continue;
       }
       switch (column.type) {
-        case 'file':
-          result[column.key] = row[key];
-          break;
         case 'single-select':
           if (column.data) {
             const option = column.data.options.find(item => { return item.name === row[key];});
@@ -58,13 +55,41 @@ function convertRowBack(table, row) {
             debug(`${row[key]} was not found, please create a new option`);
           }
           break;
+        case 'multiple-select':
+          if (!column.data) {
+            debug(`No options found, please create a new option`);
+            break;
+          }
+          const { options } = column.data;
+          const optionNames = row[key];
+          let optionIds = [];
+          for (let i = 0; i < optionNames.length; i++) {
+            const option = options.find(item => {return item.name === optionNames[i];});
+            if (option) {
+              optionIds.push(option.id);
+            } else {
+              debug(`${optionNames[i]} was not found, please create a new option`);
+            }
+          }
+          result[column.key] = optionIds;
+          break;
         case 'long-text':
           const text = row[key];
           const { preview, images, links } = getPreviewContent(text);
           const value = { text, preview, images, links };
           result[column.key] = value;
           break;
+        case 'formula':
+          // don't support formula
+          break;
+        case 'link':
+          if (column.data) {
+            result['link'] = Object.assign({}, {newValues: row[key]}, column.data);
+            // attention: if listen data-changed, stach overflow(updated -> change -> updated)s
+          }
+          break;
         default:
+          // simple-text/number/collaborator/check/file/date/image
           result[column.key] = row[key];
       }
     }

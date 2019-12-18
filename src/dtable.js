@@ -94,6 +94,12 @@ class DTable {
       return;
     }
     let newUpdated = convertRowBack(table, updated);
+    for (const key in newUpdated) {
+      if (key === 'link') {
+        const { table_id, other_table_id, display_column_key, newValues } = newUpdated[key];
+        this.addLink(table_id, other_table_id, display_column_key, row._id, newValues);
+      }
+    }
     this.dtableStore.modifyRow(tableIndex, row._id, newUpdated, null);
   }
 
@@ -105,6 +111,14 @@ class DTable {
       let newRow = convertRow(table, row);
       callback(newRow);
     });
+  }
+
+  addLink(tableId, otherTableId, displayColumnKey, rowId, newValues) {
+    const otherTableRows = this.dtableStore.getViewRows(otherTableId, '0000');
+    for (let i = 0; i < newValues.length; i++) {
+      const otherRow = otherTableRows.find(row => row[displayColumnKey] === newValues[i]);
+      this.dtableStore.addLink(tableId, otherTableId, rowId, otherRow._id);
+    }
   }
 
   uploadFile(filePath, callback) {
