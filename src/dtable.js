@@ -6,6 +6,9 @@ import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import { convertRow, convertRowBack } from './row-utils';
 
+import Debug from 'debug';
+const debug = Debug('dtable:test');
+
 const ACCESS_TOKEN_INTERVAL_TIME = (3 * 24 * 60 - 1) * 60 * 1000;
 
 class DTable {
@@ -109,6 +112,29 @@ class DTable {
     const rows = this.dtableStore.getViewRowsByNames(tableName, viewName);
     rows.forEach((row) => {
       let newRow = convertRow(table, row);
+      // 下面未测试
+      for (const key in newRow) {
+        if (key === 'link') {
+          const { table_id, other_table_id, display_column_key, rowIds, columnName } = newRow[key];
+          let linkNames = [];
+          // debug(rowIds);
+          for (let i = 0; i < rowIds.length; i++) {
+            const rowId = rowIds[i];
+            // 这里需要处理tableID的大值和小值
+            // 这里获取Name有问题
+            const cellValue = this.dtableStore.getLinkCellValue(other_table_id, table_id, rowId);
+            debug(cellValue);
+            const rows = this.dtableStore.getRowsByID(table_id, cellValue);
+            const linkNames = rows.map((row) => {return row[display_column_key]});
+            debug(linkNames);
+            // const rows = window.app.getLinkedRows(this.otherTableID, value);
+            linkNames.push(cellValue);
+          }
+          delete newRow[key];
+          debug(linkNames);
+          newRow[columnName] = linkNames;
+        }
+      }
       callback(newRow);
     });
   }

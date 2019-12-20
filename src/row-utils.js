@@ -7,27 +7,56 @@ function convertRow(table, row) {
   var result = {};
   result['_id'] = row._id;
   table.columns.forEach((column) => {
-      switch (column.type) {
-        case 'file':
-          result[column.name] = row[column.key];
+    switch (column.type) {
+      case 'single-select':
+        if (!column.data) {
+          debug(`No options found`);
           break;
-        case 'single-select':
-          if (!column.data) {
-            debug(`No options found`);
-            break;
-          }
-          let options = column.data.options;
-          let option = options.find(item => { return item.id === row[column.key];});
-          if (option) {
-            result[column.name] = option.name;
-          } else {
-            result[column.name] = '';
-          }
+        }
+        const options = column.data.options;
+        let option = options.find(item => { return item.id === row[column.key];});
+        result[column.name] = option ? option.name : '';
+        break;
+      case 'multiple-select':
+        if (!column.data) {
+          debug(`No options found`);
           break;
-        default:
-          result[column.name] = row[column.key];
-      }
-    });
+        }
+        const multiOptions = column.data.options;
+        const optionIds = row[column.key];
+        let optionNames = [];
+        for (let i = 0; i < optionIds.length; i++) {
+          let option = multiOptions.find(item => { return item.id === optionIds[i];});
+          let optionName = option ? option.name : '';
+          if (optionName) {
+            optionNames.push(optionName);
+          }
+        }
+        result[column.name] = optionNames;
+        break;
+      case 'long-text':
+        const richValue = row[column.key];
+        result[column.name] = richValue ? richValue.text : '';
+        break;
+      // 未测试 
+      case 'link':
+        if (!column.data) {
+          debug(`No links found`);
+        } else if (row[column.key]) {
+          // 如果两个link列就会出错
+          result['link'] = Object.assign({columnName: column.name}, {rowIds: row[column.key]}, column.data);
+        }
+        break;
+      case 'formula':
+        debug(column.key)
+        // 如果两个列就会出错
+        result['formula'] = column.key;
+        break;
+      default:
+        // simple-text/number/collaborator/check/file/date/image
+        result[column.name] = row[column.key];
+    }
+  });
   return result;
 }
 
@@ -86,6 +115,8 @@ function convertRowBack(table, row) {
           if (column.data) {
             result['link'] = Object.assign({}, {newValues: row[key]}, column.data);
             // attention: if listen data-changed, stach overflow(updated -> change -> updated)s
+          } else {
+            debug(`No links found`);
           }
           break;
         default:
