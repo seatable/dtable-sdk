@@ -1,5 +1,4 @@
 import getPreviewContent from './normalize-long-text-value';
-import { FormulaCalculator } from '@seafile/dtable/lib/store/formula-calculator';
 import Debug from 'debug';
 
 const debug = Debug('dtable:sdk');
@@ -117,7 +116,6 @@ function convertRowBack(table, row) {
       }
     }
   }
-
   return result;
 }
 
