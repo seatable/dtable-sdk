@@ -1,9 +1,10 @@
 import getPreviewContent from './normalize-long-text-value';
+import { FormulaCalculator } from '@seafile/dtable/lib/store/formula-calculator';
 import Debug from 'debug';
 
 const debug = Debug('dtable:sdk');
 
-function convertRow(table, row) {
+function convertRow(table, row, dtableStore) {
   var result = {};
   result['_id'] = row._id;
   table.columns.forEach((column) => {
@@ -13,21 +14,17 @@ function convertRow(table, row) {
           debug(`No options found`);
           break;
         }
-        const options = column.data.options;
-        let option = options.find(item => { return item.id === row[column.key];});
-        result[column.name] = option ? option.name : '';
+        result[column.name] = dtableStore.getSelectOptionName(column, row[column.key]);
         break;
       case 'multiple-select':
         if (!column.data) {
           debug(`No options found`);
           break;
         }
-        const multiOptions = column.data.options;
-        const optionIds = row[column.key];
         let optionNames = [];
+        const optionIds = row[column.key];
         for (let i = 0; i < optionIds.length; i++) {
-          let option = multiOptions.find(item => { return item.id === optionIds[i];});
-          let optionName = option ? option.name : '';
+          const optionName = dtableStore.getSelectOptionName(column, optionIds[i]);
           if (optionName) {
             optionNames.push(optionName);
           }
@@ -38,19 +35,20 @@ function convertRow(table, row) {
         const richValue = row[column.key];
         result[column.name] = richValue ? richValue.text : '';
         break;
-      // 未测试 
       case 'link':
         if (!column.data) {
           debug(`No links found`);
-        } else if (row[column.key]) {
-          // 如果两个link列就会出错
-          result['link'] = Object.assign({columnName: column.name}, {rowIds: row[column.key]}, column.data);
+        } else {
+          result[column.name] = convertLinkRow(dtableStore, table, column, row._id);
         }
         break;
       case 'formula':
-        debug(column.key)
-        // 如果两个列就会出错
-        result['formula'] = column.key;
+        if (!column.data) {
+          debug(`No formula found`);
+        } else {
+          // todo: getFormulaResults
+          result[column.name] = row[column.key];
+        }
         break;
       default:
         // simple-text/number/collaborator/check/file/date/image
@@ -108,16 +106,10 @@ function convertRowBack(table, row) {
           const value = { text, preview, images, links };
           result[column.key] = value;
           break;
-        case 'formula':
-          // don't support formula
-          break;
+        // don't support link column and formula column convertRowBack
         case 'link':
-          if (column.data) {
-            result['link'] = Object.assign({}, {newValues: row[key]}, column.data);
-            // attention: if listen data-changed, stach overflow(updated -> change -> updated)s
-          } else {
-            debug(`No links found`);
-          }
+          break;
+        case 'formula':
           break;
         default:
           // simple-text/number/collaborator/check/file/date/image
@@ -127,6 +119,15 @@ function convertRowBack(table, row) {
   }
 
   return result;
+}
+
+function convertLinkRow(dtableStore, table, column, rowId) {
+  const { table_id, other_table_id } = column.data;
+  const tableID = table._id;
+  const otherTableID = tableID === table_id ? other_table_id : table_id;
+  const otherTableRowIDs = dtableStore.getLinkCellValue(tableID, otherTableID, rowId);
+  const otherTableRows = dtableStore.getRowsByID(otherTableID, otherTableRowIDs);
+  return otherTableRows.map(row => { return row['0000'] });
 }
 
 export { convertRow, convertRowBack };
