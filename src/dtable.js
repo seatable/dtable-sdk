@@ -102,7 +102,7 @@ class DTable {
     if (!table) return;
     const rows = this.dtableStore.getViewRowsByNames(tableName, viewName);
     rows.forEach((row) => {
-      let newRow = convertRow(table, row);
+      let newRow = convertRow(table, row, this.dtableStore);
       callback(newRow);
     });
   }

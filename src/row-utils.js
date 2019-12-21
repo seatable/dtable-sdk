@@ -3,31 +3,57 @@ import Debug from 'debug';
 
 const debug = Debug('dtable:sdk');
 
-function convertRow(table, row) {
+function convertRow(table, row, dtableStore) {
   var result = {};
   result['_id'] = row._id;
   table.columns.forEach((column) => {
-      switch (column.type) {
-        case 'file':
-          result[column.name] = row[column.key];
+    switch (column.type) {
+      case 'single-select':
+        if (!column.data) {
+          debug(`No options found`);
           break;
-        case 'single-select':
-          if (!column.data) {
-            // a single-select column with no options
-            break;
-          }
-          let options = column.data.options;
-          let option = options.find(item => { return item.id === row[column.key];});
-          if (option) {
-            result[column.name] = option.name;
-          } else {
-            result[column.name] = '';
-          }
+        }
+        result[column.name] = dtableStore.getSelectOptionName(column, row[column.key]);
+        break;
+      case 'multiple-select':
+        if (!column.data) {
+          debug(`No options found`);
           break;
-        default:
+        }
+        let optionNames = [];
+        const optionIds = row[column.key];
+        for (let i = 0; i < optionIds.length; i++) {
+          const optionName = dtableStore.getSelectOptionName(column, optionIds[i]);
+          if (optionName) {
+            optionNames.push(optionName);
+          }
+        }
+        result[column.name] = optionNames;
+        break;
+      case 'long-text':
+        const richValue = row[column.key];
+        result[column.name] = richValue ? richValue.text : '';
+        break;
+      case 'link':
+        if (!column.data) {
+          debug(`No links found`);
+        } else {
+          result[column.name] = convertLinkRow(dtableStore, table, column, row._id);
+        }
+        break;
+      case 'formula':
+        if (!column.data) {
+          debug(`No formula found`);
+        } else {
+          // todo: getFormulaResults
           result[column.name] = row[column.key];
-      }
-    });
+        }
+        break;
+      default:
+        // simple-text/number/collaborator/check/file/date/image
+        result[column.name] = row[column.key];
+    }
+  });
   return result;
 }
 
@@ -43,9 +69,6 @@ function convertRowBack(table, row) {
         continue;
       }
       switch (column.type) {
-        case 'file':
-          result[column.key] = row[key];
-          break;
         case 'single-select':
           if (column.data) {
             const option = column.data.options.find(item => { return item.name === row[key];});
@@ -58,19 +81,51 @@ function convertRowBack(table, row) {
             debug(`${row[key]} was not found, please create a new option`);
           }
           break;
+        case 'multiple-select':
+          if (!column.data) {
+            debug(`No options found, please create a new option`);
+            break;
+          }
+          const { options } = column.data;
+          const optionNames = row[key];
+          let optionIds = [];
+          for (let i = 0; i < optionNames.length; i++) {
+            const option = options.find(item => {return item.name === optionNames[i];});
+            if (option) {
+              optionIds.push(option.id);
+            } else {
+              debug(`${optionNames[i]} was not found, please create a new option`);
+            }
+          }
+          result[column.key] = optionIds;
+          break;
         case 'long-text':
           const text = row[key];
           const { preview, images, links } = getPreviewContent(text);
           const value = { text, preview, images, links };
           result[column.key] = value;
           break;
+        // don't support link column and formula column convertRowBack
+        case 'link':
+          break;
+        case 'formula':
+          break;
         default:
+          // simple-text/number/collaborator/check/file/date/image
           result[column.key] = row[key];
       }
     }
   }
-
   return result;
+}
+
+function convertLinkRow(dtableStore, table, column, rowId) {
+  const { table_id, other_table_id } = column.data;
+  const tableID = table._id;
+  const otherTableID = tableID === table_id ? other_table_id : table_id;
+  const otherTableRowIDs = dtableStore.getLinkCellValue(tableID, otherTableID, rowId);
+  const otherTableRows = dtableStore.getRowsByID(otherTableID, otherTableRowIDs);
+  return otherTableRows.map(row => { return row['0000'] });
 }
 
 export { convertRow, convertRowBack };
