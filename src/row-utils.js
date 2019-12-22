@@ -3,7 +3,7 @@ import Debug from 'debug';
 
 const debug = Debug('dtable:sdk');
 
-function convertRow(table, row, dtableStore) {
+function convertRow(table, row, dtableStore, formulaResults) {
   var result = {};
   result['_id'] = row._id;
   table.columns.forEach((column) => {
@@ -42,11 +42,12 @@ function convertRow(table, row, dtableStore) {
         }
         break;
       case 'formula':
-        if (!column.data) {
+        if (!column.data || !formulaResults) {
           debug(`No formula found`);
         } else {
-          // todo: getFormulaResults
-          result[column.name] = row[column.key];
+          const rowID = row._id;
+          const columnKey = row[column.key];
+          result[column.name] = formulaResults[rowID] ? formulaResults[rowID][columnKey] : null;
         }
         break;
       default:

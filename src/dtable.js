@@ -101,8 +101,10 @@ class DTable {
     let table = this.dtableStore.getTableByName(tableName);
     if (!table) return;
     const rows = this.dtableStore.getViewRowsByNames(tableName, viewName);
+    const formulaColumns = this.dtableStore.getAllFormulaColumns(table);
+    const formulaResults = formulaColumns && this.dtableStore.getTableFormulaResults(table, formulaColumns);
     rows.forEach((row) => {
-      let newRow = convertRow(table, row, this.dtableStore);
+      let newRow = convertRow(table, row, this.dtableStore, formulaResults);
       callback(newRow);
     });
   }
