@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore } from '@seafile/dtable-store';
+import { DTableStore } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import { convertRow, convertRowBack } from './row-utils';
