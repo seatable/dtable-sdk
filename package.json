@@ -1,15 +1,20 @@
 {
   "name": "dtable-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "dtable sdk",
-  "main": "index.js",
+  "main": "./dist/dtable.js",
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
     "example": "export DEBUG=dtable* && babel-node ./example/example.js",
-    "build:pkg-js": "./node_modules/.bin/babel src --out-dir dist/src",
+    "build:pkg-js": "./node_modules/.bin/babel src --out-dir dist",
     "build:pkg-bin": "./node_modules/.bin/babel bin --out-dir dist/bin --copy-files",
-    "build": "npm run clean && npm run build:pkg-bin && npm run build:pkg-js"
+    "build": "npm run clean && npm run build:pkg-js"
   },
+  "files": [
+    "dist",
+    "package.json",
+    "package-lock.json"
+  ],
   "dependencies": {
     "dtable-store": "0.0.12",
     "axios": "^0.19.0",
