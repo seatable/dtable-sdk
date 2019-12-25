@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import DtableStore from '@seafile/dtable/lib/store/dtable-store';
+import { DTableStore } from '@seafile/dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import { convertRow, convertRowBack } from './row-utils';
@@ -29,7 +29,7 @@ class DTable {
       this.config.dtableServer = dtable_server.replace(/\/+$/, "") + "/";
       this.config.dtableSocket = dtable_socket.replace(/\/+$/, "") + "/";
       this.dtableServerAPI = new DTableServerAPI(this.config);
-      this.dtableStore = new DtableStore(this.config);
+      this.dtableStore = new DTableStore(this.config);
       this.eventBus = this.dtableStore.eventBus;
     } catch(err) { 
       console.log(err);

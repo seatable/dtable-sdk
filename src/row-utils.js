@@ -46,7 +46,7 @@ function convertRow(table, row, dtableStore, formulaResults) {
           debug(`No formula found`);
         } else {
           const rowID = row._id;
-          const columnKey = row[column.key];
+          const columnKey = column.key;
           result[column.name] = formulaResults[rowID] ? formulaResults[rowID][columnKey] : null;
         }
         break;

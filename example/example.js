@@ -26,7 +26,7 @@ class Test {
     dtable.forEachRow('sayHello', 'Default_View', (row) => { 
       let name = row['Name'];
       const res = `Hello ${name}`;
-      if (row['Result'] && row['Result'].text === res) {
+      if (row['Result'] && row['Result'] === res) {
         return;
       }
       let updated = {};
