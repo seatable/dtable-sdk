@@ -10,14 +10,14 @@ function convertRow(table, row, dtableStore, formulaResults) {
     switch (column.type) {
       case 'single-select':
         if (!column.data) {
-          debug(`No options found`);
+          debug('No options found');
           break;
         }
         result[column.name] = dtableStore.getSelectOptionName(column, row[column.key]);
         break;
       case 'multiple-select':
         if (!column.data) {
-          debug(`No options found`);
+          debug('No options found');
           break;
         }
         let optionNames = [];
@@ -36,14 +36,14 @@ function convertRow(table, row, dtableStore, formulaResults) {
         break;
       case 'link':
         if (!column.data) {
-          debug(`No links found`);
+          debug('No links found');
         } else {
           result[column.name] = convertLinkRow(dtableStore, table, column, row._id);
         }
         break;
       case 'formula':
         if (!column.data || !formulaResults) {
-          debug(`No formula found`);
+          debug('No formula found');
         } else {
           const rowID = row._id;
           const columnKey = column.key;
@@ -84,7 +84,7 @@ function convertRowBack(table, row) {
           break;
         case 'multiple-select':
           if (!column.data) {
-            debug(`No options found, please create a new option`);
+            debug('No options found, please create a new option');
             break;
           }
           const { options } = column.data;
@@ -126,7 +126,7 @@ function convertLinkRow(dtableStore, table, column, rowId) {
   const otherTableID = tableID === table_id ? other_table_id : table_id;
   const otherTableRowIDs = dtableStore.getLinkCellValue(tableID, otherTableID, rowId);
   const otherTableRows = dtableStore.getRowsByID(otherTableID, otherTableRowIDs);
-  return otherTableRows.map(row => { return row['0000'] });
+  return otherTableRows.map(row => { return row['0000']; });
 }
 
 export { convertRow, convertRowBack };

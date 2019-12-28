@@ -9,7 +9,6 @@ import { convertRow, convertRowBack } from './row-utils';
 const ACCESS_TOKEN_INTERVAL_TIME = (3 * 24 * 60 - 1) * 60 * 1000;
 
 class DTable {
-
   constructor() {
     this.dtableStore = null;
     this.eventBus = null;
@@ -26,15 +25,14 @@ class DTable {
       const { access_token, dtable_uuid, dtable_server, dtable_socket } = res.data;
       this.config.accessToken = access_token;
       this.config.dtableUuid = dtable_uuid;
-      this.config.dtableServer = dtable_server.replace(/\/+$/, "") + "/";
-      this.config.dtableSocket = dtable_socket.replace(/\/+$/, "") + "/";
+      this.config.dtableServer = dtable_server.replace(/\/+$/, '') + '/';
+      this.config.dtableSocket = dtable_socket.replace(/\/+$/, '') + '/';
       this.dtableServerAPI = new DTableServerAPI(this.config);
       this.dtableStore = new DTableStore(this.config);
       this.eventBus = this.dtableStore.eventBus;
-    } catch(err) { 
+    } catch (err) {
       console.log(err);
-      return;
-    };
+    }
   }
 
   async syncWithServer() {
@@ -50,7 +48,6 @@ class DTable {
         this.dtableStore.updateAccessToken(res.data.access_token);
       } catch (err) {
         console.log(err);
-        return;
       }
     }, ACCESS_TOKEN_INTERVAL_TIME);
   }
@@ -115,9 +112,9 @@ class DTable {
       let parentPath = res.data.parent_path;
       let relativePath = 'files';
       let formData = new FormData();
-      formData.append("parent_dir", parentPath);
-      formData.append("relative_path", relativePath);
-      formData.append("file", fs.createReadStream(filePath));
+      formData.append('parent_dir', parentPath);
+      formData.append('relative_path', relativePath);
+      formData.append('file', fs.createReadStream(filePath));
       formData.getLength((err, length) => {
         if (err) {
           callback(err);
@@ -131,12 +128,12 @@ class DTable {
             fileInfo.url = url;
             callback(false, fileInfo);
           }).catch(err => {
-            callback(err)
-          })
+            callback(err);
+          });
         }
-      })
+      });
     }).catch(err => {
-      callback(err)
+      callback(err);
     });
   }
 
