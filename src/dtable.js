@@ -1,10 +1,13 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore } from 'dtable-store';
+import { DTableStore, Views } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import { convertRow, convertRowBack } from './row-utils';
+import Debug from 'debug';
+
+const debug = Debug('dtable:sdk');
 
 const ACCESS_TOKEN_INTERVAL_TIME = (3 * 24 * 60 - 1) * 60 * 1000;
 
@@ -96,10 +99,24 @@ class DTable {
 
   forEachRow(tableName, viewName, callback) {
     let table = this.dtableStore.getTableByName(tableName);
-    if (!table) return;
-    const rows = this.dtableStore.getViewRowsByNames(tableName, viewName);
-    const formulaColumns = this.dtableStore.getAllFormulaColumns(table);
-    const formulaResults = formulaColumns && this.dtableStore.getTableFormulaResults(table, formulaColumns, rows);
+    if (!table) {
+      debug(`table ${tableName} does not exist.`);
+      return;
+    }
+    let view = Views.getViewByName(table.views, viewName);
+    if (!view) {
+      debug(`view ${viewName} does not exist.`);
+      return;
+    }
+    const rows = Views.getViewRows(view, table);
+
+    const formulaColumns = Views.getAllFormulaColumns(Views.getColumns(view, table));
+    let formulaResults = {};
+    if (formulaColumns && formulaColumns.length > 0) {
+      Views.updateFormulaRows(view, table, formulaColumns, rows);
+      formulaResults = Views.getFormulaRows(view);
+    }
+
     rows.forEach((row) => {
       let newRow = convertRow(table, row, this.dtableStore, formulaResults);
       callback(newRow);
