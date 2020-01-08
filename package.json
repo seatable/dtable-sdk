@@ -9,7 +9,8 @@
     "test": "export DEBUG=dtable* && babel-node ./test/complex-test.js",
     "build:pkg-js": "./node_modules/.bin/babel src --out-dir dist",
     "build:pkg-bin": "./node_modules/.bin/babel bin --out-dir dist/bin --copy-files",
-    "prepublishOnly": "npm run clean && npm run build:pkg-js"
+    "prepublishOnly": "npm run clean && npm run build:pkg-js && npm run ugly",
+    "ugly": "rm -rf lib && mkdir lib && uglifyjs dist/**.js --output lib/dtable.min.js --compress --mangle"
   },
   "files": [
     "dist",
@@ -30,6 +31,7 @@
     "@babel/preset-env": "^7.5.0",
     "@babel/register": "^7.4.4",
     "babel-register": "^6.26.0",
-    "debug": "^4.1.1"
+    "debug": "^4.1.1",
+    "uglify-js": "^3.7.4"
   }
 }

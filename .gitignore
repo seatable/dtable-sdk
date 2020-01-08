@@ -4,6 +4,8 @@
 # dist
 /dist
 
+/lib
+
 # config
 /config/
 config.json
