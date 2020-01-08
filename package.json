@@ -1,6 +1,6 @@
 {
   "name": "dtable-sdk",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "dtable sdk",
   "main": "./dist/dtable.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "test": "export DEBUG=dtable* && babel-node ./test/complex-test.js",
     "build:pkg-js": "./node_modules/.bin/babel src --out-dir dist",
     "build:pkg-bin": "./node_modules/.bin/babel bin --out-dir dist/bin --copy-files",
-    "build": "npm run clean && npm run build:pkg-js"
+    "prepublishOnly": "npm run clean && npm run build:pkg-js"
   },
   "files": [
     "dist",
