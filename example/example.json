@@ -1,7 +1,7 @@
 {
-    "APIToken": "xxxxxxxx",
-    "server": "http://127.0.0.1:8001",
-    "workspaceID": "xxxxxxxx",
-    "dtableName": "xxxxxxxx",
+    "APIToken": "961ddfc67470cb2e2640e325c3378c625fd2b7d4",
+    "server": "http://127.0.0.1:8000",
+    "workspaceID": "2",
+    "dtableName": "sdk-test",
     "licenseGeneratorToken": "xxxxxxxx"
 }
