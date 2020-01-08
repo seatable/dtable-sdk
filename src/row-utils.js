@@ -1,9 +1,47 @@
-import getPreviewContent from './normalize-long-text-value';
 import Debug from 'debug';
-
+import { LinksUtils } from 'dtable-store';
+import getPreviewContent from './normalize-long-text-value';
 const debug = Debug('dtable:sdk');
 
-function convertRow(table, row, dtableStore, formulaResults) {
+function getSelectOptionName(column, optionID) {
+  let options = column.data && column.data.options;
+  if (options && optionID) {
+    let option = options && options.find(option => option.id === optionID);
+    return option ? option.name : '';
+  }
+  return '';
+}
+
+function getRowsByID(tables, tableID, rowIds) {
+  const table = tables.find(table => {
+    return table._id === tableID;
+  });
+  if (!table) {
+    return [];
+  }
+  return rowIds.map(row_id => {
+    return table.id_row_map[row_id];
+  }).filter(row => {
+    return row;
+  });
+}
+
+function getLinkCellValue(links, table1ID, table2ID, rowID) {
+  if (!links || !table1ID || !table2ID || !rowID) {
+    return [];
+  }
+  let linkBetween2Tables = LinksUtils.getLinkByTableIds(links, table1ID, table2ID);
+  if (!linkBetween2Tables) {
+    return [];
+  }
+  const linkMap = linkBetween2Tables.table1_id === table1ID ? linkBetween2Tables.table1_table2_map : linkBetween2Tables.table2_table1_map;
+  if (!linkMap[rowID]) {
+    return [];
+  }
+  return linkMap[rowID];
+}
+
+function convertRow(value, table, row, formulaResults) {
   var result = {};
   result['_id'] = row._id;
   table.columns.forEach((column) => {
@@ -13,7 +51,7 @@ function convertRow(table, row, dtableStore, formulaResults) {
           debug('No options found');
           break;
         }
-        result[column.name] = dtableStore.getSelectOptionName(column, row[column.key]);
+        result[column.name] = getSelectOptionName(column, row[column.key]);
         break;
       case 'multiple-select':
         if (!column.data) {
@@ -23,7 +61,7 @@ function convertRow(table, row, dtableStore, formulaResults) {
         let optionNames = [];
         const optionIds = row[column.key];
         for (let i = 0; i < optionIds.length; i++) {
-          const optionName = dtableStore.getSelectOptionName(column, optionIds[i]);
+          const optionName = getSelectOptionName(column, optionIds[i]);
           if (optionName) {
             optionNames.push(optionName);
           }
@@ -38,7 +76,7 @@ function convertRow(table, row, dtableStore, formulaResults) {
         if (!column.data) {
           debug('No links found');
         } else {
-          result[column.name] = convertLinkRow(dtableStore, table, column, row._id);
+          result[column.name] = convertLinkRow(value, table, column, row._id);
         }
         break;
       case 'formula':
@@ -120,12 +158,13 @@ function convertRowBack(table, row) {
   return result;
 }
 
-function convertLinkRow(dtableStore, table, column, rowId) {
+function convertLinkRow(value, table, column, rowId) {
+  const { tables, links } = value;
   const { table_id, other_table_id } = column.data;
   const tableID = table._id;
   const otherTableID = tableID === table_id ? other_table_id : table_id;
-  const otherTableRowIDs = dtableStore.getLinkCellValue(tableID, otherTableID, rowId);
-  const otherTableRows = dtableStore.getRowsByID(otherTableID, otherTableRowIDs);
+  const otherTableRowIDs = getLinkCellValue(tables, tableID, otherTableID, rowId);
+  const otherTableRows = getRowsByID(links, otherTableID, otherTableRowIDs);
   return otherTableRows.map(row => { return row['0000']; });
 }
 

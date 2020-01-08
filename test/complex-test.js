@@ -30,7 +30,7 @@ let test = new Test(dtable);
 async function init() {
   await dtable.init(config);
   dtable.subscribe('dtable-connect', () => { test.printRows(); });
-  dtable.subscribe('dtable-data-changed', () => { test.printRows(); });
+  dtable.subscribe('remote-dtable-changed', () => { test.printRows(); });
   await dtable.syncWithServer();
 }
 

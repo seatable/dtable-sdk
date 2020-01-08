@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, Views } from 'dtable-store';
+import { DTableStore, Views, TableUtils } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import { convertRow, convertRowBack } from './row-utils';
@@ -65,7 +65,7 @@ class DTable {
   }
 
   getTableByName(name) {
-    return this.dtableStore.getTableByName(name);
+    return TableUtils.getTableByName(this.dtableStore.value.tables, name);
   }
 
   getColumnByName(table, name) {
@@ -98,7 +98,8 @@ class DTable {
   }
 
   forEachRow(tableName, viewName, callback) {
-    let table = this.dtableStore.getTableByName(tableName);
+    let value = this.dtableStore.value;
+    let table = TableUtils.getTableByName(value.tables, tableName);
     if (!table) {
       debug(`table ${tableName} does not exist.`);
       return;
@@ -118,7 +119,7 @@ class DTable {
     }
 
     rows.forEach((row) => {
-      let newRow = convertRow(table, row, this.dtableStore, formulaResults);
+      let newRow = convertRow(value, table, row, formulaResults);
       callback(newRow);
     });
   }
