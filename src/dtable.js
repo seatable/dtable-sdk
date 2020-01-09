@@ -1,10 +1,9 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, Views } from 'dtable-store';
+import { DTableStore, Views, TableUtils, RowUtils } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
-import { convertRow, convertRowBack } from './row-utils';
 import Debug from 'debug';
 
 const debug = Debug('dtable:sdk');
@@ -65,7 +64,7 @@ class DTable {
   }
 
   getTableByName(name) {
-    return this.dtableStore.getTableByName(name);
+    return TableUtils.getTableByName(this.dtableStore.value.tables, name);
   }
 
   getColumnByName(table, name) {
@@ -82,7 +81,7 @@ class DTable {
     if (tableIndex === -1) {
       return;
     }
-    let newRowData = convertRowBack(table, rowData);
+    let newRowData = RowUtils.convertRowBack(rowData, table);
     let lastRow = table.rows[table.rows.length - 1];
     this.dtableStore.insertRow(tableIndex, lastRow._id, 'insert_below', newRowData);
   }
@@ -93,12 +92,13 @@ class DTable {
     if (tableIndex === -1) {
       return;
     }
-    let newUpdated = convertRowBack(table, updated);
+    let newUpdated = RowUtils.convertRowBack(updated, table);
     this.dtableStore.modifyRow(tableIndex, row._id, newUpdated, null);
   }
 
   forEachRow(tableName, viewName, callback) {
-    let table = this.dtableStore.getTableByName(tableName);
+    let value = this.dtableStore.value;
+    let table = TableUtils.getTableByName(value.tables, tableName);
     if (!table) {
       debug(`table ${tableName} does not exist.`);
       return;
@@ -118,7 +118,7 @@ class DTable {
     }
 
     rows.forEach((row) => {
-      let newRow = convertRow(table, row, this.dtableStore, formulaResults);
+      let newRow = RowUtils.convertRow(row, value, table, view, formulaResults);
       callback(newRow);
     });
   }
