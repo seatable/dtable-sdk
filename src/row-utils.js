@@ -60,6 +60,10 @@ function convertRow(value, table, row, formulaResults) {
         }
         let optionNames = [];
         const optionIds = row[column.key];
+        if (!Array.isArray(optionIds)) {
+          result[column.name] = '';
+          break;
+        }
         for (let i = 0; i < optionIds.length; i++) {
           const optionName = getSelectOptionName(column, optionIds[i]);
           if (optionName) {

@@ -25,7 +25,7 @@ class Test {
     let table = dtable.getTableByName('sayHello');
     if (!table) return;
     dtable.forEachRow('sayHello', 'Default_View', (row) => {
-      let name = row['Name'];
+      let name = row['Name'] || '';
       const res = `Hello ${name}`;
       if (row['Result'] && row['Result'] === res) {
         return;
