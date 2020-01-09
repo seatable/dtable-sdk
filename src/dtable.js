@@ -1,10 +1,9 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, Views, TableUtils } from 'dtable-store';
+import { DTableStore, Views, TableUtils, RowUtils } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
-import { convertRow, convertRowBack } from './row-utils';
 import Debug from 'debug';
 
 const debug = Debug('dtable:sdk');
@@ -82,7 +81,7 @@ class DTable {
     if (tableIndex === -1) {
       return;
     }
-    let newRowData = convertRowBack(table, rowData);
+    let newRowData = RowUtils.convertRowBack(rowData, table);
     let lastRow = table.rows[table.rows.length - 1];
     this.dtableStore.insertRow(tableIndex, lastRow._id, 'insert_below', newRowData);
   }
@@ -93,7 +92,7 @@ class DTable {
     if (tableIndex === -1) {
       return;
     }
-    let newUpdated = convertRowBack(table, updated);
+    let newUpdated = RowUtils.convertRowBack(updated, table);
     this.dtableStore.modifyRow(tableIndex, row._id, newUpdated, null);
   }
 
@@ -119,7 +118,7 @@ class DTable {
     }
 
     rows.forEach((row) => {
-      let newRow = convertRow(value, table, row, formulaResults);
+      let newRow = RowUtils.convertRow(row, value, table, view, formulaResults);
       callback(newRow);
     });
   }
