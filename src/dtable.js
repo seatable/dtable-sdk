@@ -82,8 +82,10 @@ class DTable {
       return;
     }
     let newRowData = RowUtils.convertRowBack(rowData, table);
-    let lastRow = table.rows[table.rows.length - 1];
-    this.dtableStore.insertRow(tableIndex, lastRow._id, 'insert_below', newRowData);
+    let rows = table.rows;
+    let lastRow = rows.length === 0 ? null : rows[rows.length - 1];
+    let rowId = lastRow ? lastRow._id : '';
+    this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', newRowData);
   }
 
   modifyRow(table, row, updated) {
