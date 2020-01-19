@@ -37,6 +37,21 @@ class DTable {
     }
   }
 
+  async initInBrowser(dtableStore, dtableServerAPI, dtableSettings) {
+    let { dtableServer, dtableSocket, dtableUuid, accessToken } = dtable;
+    // init config
+    this.config.dtableServer = dtableServer;
+    this.config.dtableSocket = dtableSocket;
+    this.config.dtableUuid = dtableUuid;
+    this.config.accessToken = accessToken;
+
+    // init tool object
+    this.dtableStore = dtableStore;
+    this.dtableServerAPI = dtableServerAPI;
+    this.eventBus = this.dtableStore.eventBus;
+
+  }
+
   async syncWithServer() {
     await this.dtableStore.loadFromServer();
     this.dtableStore.syncWithServer();
