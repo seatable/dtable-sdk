@@ -37,19 +37,13 @@ class DTable {
     }
   }
 
-  initInBrowser(dtableStore, dtableServerAPI, dtableSettings) {
-    let { dtableServer, dtableSocket, dtableUuid, accessToken } = dtableSettings;
-    // init config
-    this.config = {};
-    this.config.dtableServer = dtableServer;
-    this.config.dtableSocket = dtableSocket;
-    this.config.dtableUuid = dtableUuid;
-    this.config.accessToken = accessToken;
-
+  initInBrowser(dtableStore) {
     // init tool object
     this.dtableStore = dtableStore;
-    this.dtableServerAPI = dtableServerAPI;
     this.eventBus = this.dtableStore.eventBus;
+
+    this.config = {};
+    this.dtableServerAPI = null;
 
   }
 
