@@ -37,6 +37,16 @@ class DTable {
     }
   }
 
+  initInBrowser(dtableStore) {
+    // init tool object
+    this.dtableStore = dtableStore;
+    this.eventBus = this.dtableStore.eventBus;
+
+    this.config = {};
+    this.dtableServerAPI = null;
+
+  }
+
   async syncWithServer() {
     await this.dtableStore.loadFromServer();
     this.dtableStore.syncWithServer();
