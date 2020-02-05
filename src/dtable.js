@@ -24,7 +24,8 @@ class DTable {
 
     try {
       let res = await this.dtableWebAPI.getDTableAccessToken();
-      const { access_token, dtable_uuid, dtable_server, dtable_socket } = res.data;
+      const { app_name, access_token, dtable_uuid, dtable_server, dtable_socket } = res.data;
+      this.config.appName = app_name;
       this.config.accessToken = access_token;
       this.config.dtableUuid = dtable_uuid;
       this.config.dtableServer = dtable_server.replace(/\/+$/, '') + '/';
