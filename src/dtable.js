@@ -74,8 +74,13 @@ class DTable {
     this.eventBus = null;
   }
 
+  getTables() {
+    return this.dtableStore.value.tables;
+  }
+
   getTableByName(name) {
-    return TableUtils.getTableByName(this.dtableStore.value.tables, name);
+    let tables = this.getTables();
+    return TableUtils.getTableByName(tables, name);
   }
 
   getColumnByName(table, name) {
@@ -87,7 +92,7 @@ class DTable {
   }
 
   appendRow(table, rowData) {
-    let tables = this.dtableStore.value.tables;
+    let tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
     if (tableIndex === -1) {
       return;
@@ -100,7 +105,7 @@ class DTable {
   }
 
   modifyRow(table, row, updated) {
-    let tables = this.dtableStore.value.tables;
+    let tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
     if (tableIndex === -1) {
       return;
@@ -111,7 +116,8 @@ class DTable {
 
   forEachRow(tableName, viewName, callback) {
     let value = this.dtableStore.value;
-    let table = TableUtils.getTableByName(value.tables, tableName);
+    let tables = this.getTables();
+    let table = TableUtils.getTableByName(tables, tableName);
     if (!table) {
       debug(`table ${tableName} does not exist.`);
       return;
