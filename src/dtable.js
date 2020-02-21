@@ -50,6 +50,7 @@ class DTable {
 
   async syncWithServer() {
     await this.dtableStore.loadFromServer();
+    await this.dtableStore.loadRelatedUsers();
     this.dtableStore.syncWithServer();
     this.updateDTableAccessToken();
   }
@@ -81,6 +82,10 @@ class DTable {
   getTableByName(name) {
     let tables = this.getTables();
     return TableUtils.getTableByName(tables, name);
+  }
+
+  getRelatedUsers() {
+    return this.dtableStore.collaborators;
   }
 
   getColumnByName(table, name) {
