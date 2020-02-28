@@ -4,12 +4,11 @@
   "description": "dtable sdk",
   "main": "./dist/dtable.js",
   "scripts": {
-    "clean": "rm -rf dist && mkdir dist",
     "example": "export DEBUG=dtable* && babel-node ./example/example.js",
     "test": "export DEBUG=dtable* && babel-node ./test/complex-test.js",
-    "build:pkg-js": "./node_modules/.bin/babel src --out-dir dist",
-    "build:pkg-bin": "./node_modules/.bin/babel bin --out-dir dist/bin --copy-files",
-    "prepublishOnly": "npm run clean && npm run build:pkg-js"
+    "build:pkg-lib": "rm -rf lib && mkdir lib && ./node_modules/.bin/babel src --out-dir lib",
+    "build:pkg-dist": "rm -rf dist && mkdir dist && export BABEL_ENV=production && webpack",
+    "prepublishOnly": "npm run build:pkg-lib && npm run build:pkg-dist"
   },
   "files": [
     "dist",
@@ -30,6 +29,9 @@
     "@babel/preset-env": "^7.5.0",
     "@babel/register": "^7.4.4",
     "babel-register": "^6.26.0",
-    "debug": "^4.1.1"
+    "debug": "^4.1.1",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   }
 }
