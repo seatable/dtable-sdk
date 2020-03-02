@@ -178,11 +178,11 @@ class DTable {
     });
   }
 
-  updatePluginSettings = (plugin_name, plugin_settings) => {
+  updatePluginSettings(plugin_name, plugin_settings) {
     this.dtableStore.updatePluginSettings(plugin_name, plugin_settings);
   }
 
-  deletePluginSettings = (plugin_name) => {
+  deletePluginSettings(plugin_name) {
     this.dtableStore.deletePluginSettings(plugin_name);
   }
 
