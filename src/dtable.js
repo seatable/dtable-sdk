@@ -178,6 +178,11 @@ class DTable {
     });
   }
 
+  getPluginSettings(plugin_name) {
+    let plugin_settings = this.dtableStore.value.plugin_settings;
+    return plugin_settings[plugin_name] || null;
+  }
+
   updatePluginSettings(plugin_name, plugin_settings) {
     this.dtableStore.updatePluginSettings(plugin_name, plugin_settings);
   }
