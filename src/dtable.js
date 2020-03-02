@@ -80,7 +80,8 @@ class DTable {
   }
 
   getActiveTable() {
-    return this.dtableStore.currentTable;
+    let tables = this.getTables();
+    return this.dtableStore.currentTable || tables[0];
   }
 
   getTables() {
@@ -90,6 +91,13 @@ class DTable {
   getTableByName(name) {
     let tables = this.getTables();
     return TableUtils.getTableByName(tables, name);
+  }
+
+  getActiveView() {
+    let activeTable = this.getActiveTable();
+    let views = this.getViews(activeTable);
+    let active_index = this.dtableStore.view_index;
+    return views[active_index] || views[0];
   }
 
   getViews(table) {
