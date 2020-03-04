@@ -75,6 +75,15 @@ class DTable {
     this.eventBus = null;
   }
 
+  getRelatedUsers() {
+    return this.dtableStore.collaborators;
+  }
+
+  getActiveTable() {
+    let tables = this.getTables();
+    return this.dtableStore.currentTable || tables[0];
+  }
+
   getTables() {
     return this.dtableStore.value.tables;
   }
@@ -84,8 +93,31 @@ class DTable {
     return TableUtils.getTableByName(tables, name);
   }
 
-  getRelatedUsers() {
-    return this.dtableStore.collaborators;
+  getActiveView() {
+    let activeTable = this.getActiveTable();
+    let views = this.getViews(activeTable);
+    let active_index = this.dtableStore.view_index;
+    return views[active_index] || views[0];
+  }
+
+  getViews(table) {
+    return table.views;
+  }
+
+  getViewByName(table, name) {
+    return table.views.find(view => view.name === name);
+  }
+
+  getColumns(table) {
+    return table.columns;
+  }
+
+  getShownColumns(table, view) {
+    let hidden_columns = view.hidden_columns;
+    let shownColumns = table.columns.filter(column => {
+      return hidden_columns.indexOf(column.key) === -1;
+    });
+    return shownColumns;
   }
 
   getColumnByName(table, name) {
@@ -176,6 +208,19 @@ class DTable {
     }).catch(err => {
       callback(err);
     });
+  }
+
+  getPluginSettings(plugin_name) {
+    let plugin_settings = this.dtableStore.value.plugin_settings || {};
+    return plugin_settings[plugin_name] || null;
+  }
+
+  updatePluginSettings(plugin_name, plugin_settings) {
+    this.dtableStore.updatePluginSettings(plugin_name, plugin_settings);
+  }
+
+  deletePluginSettings(plugin_name) {
+    this.dtableStore.deletePluginSettings(plugin_name);
   }
 
 }
