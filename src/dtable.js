@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, Views, TableUtils, RowUtils } from 'dtable-store';
+import { DTableStore, Views, TableUtils, RowUtils, CellType } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import Debug from 'debug';
@@ -122,6 +122,14 @@ class DTable {
 
   getColumnByName(table, name) {
     return table.columns.find(column => column.name === name);
+  }
+
+  getColumnsByType(table, type) {
+    return this.getColumns(table).filter((item) => item.type === type);
+  }
+
+  getCellType() {
+    return CellType;
   }
 
   getRowById(table, rowId) {
