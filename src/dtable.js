@@ -133,19 +133,26 @@ class DTable {
   }
 
   getRowById(table, rowId) {
-    return table.Id2Row[rowId];
+    return table.id_row_map[rowId];
   }
 
-  appendRow(table, rowData) {
+  appendRow(table, view, rowData) {
     let tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
     if (tableIndex === -1) {
       return;
     }
     let newRowData = RowUtils.convertRowBack(rowData, table);
-    let rows = table.rows;
-    let lastRow = rows.length === 0 ? null : rows[rows.length - 1];
-    let rowId = lastRow ? lastRow._id : '';
+    let rowId;
+    if (view) {
+      const rows = Views.getViewRows(view, table);
+      let lastRow = rows.length === 0 ? null : rows[rows.length - 1];
+      rowId = lastRow ? lastRow._id : '';
+    } else {
+      let rows = table.rows;
+      let lastRow = rows.length === 0 ? null : rows[rows.length - 1];
+      rowId = lastRow ? lastRow._id : '';
+    }
     this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', newRowData);
   }
 
@@ -185,6 +192,22 @@ class DTable {
       let newRow = RowUtils.convertRow(row, value, table, view, formulaResults);
       callback(newRow);
     });
+  }
+
+  getViewRows = (view, table) => {
+    return Views.getViewRows(view, table);
+  }
+
+  getRowDataByView(view, table, row_id) {
+    let row_data;
+    if (!Views.isDefaultView(view)) {
+      row_data = Views.getRowDataUsedInFilters(view, table, row_id);
+    }
+    return row_data;
+  }
+
+  getRowCommentCount(rowID) {
+    return this.dtableServerAPI.getRowCommentsCount(rowID);
   }
 
   uploadFile(filePath, callback) {
