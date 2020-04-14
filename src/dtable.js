@@ -143,10 +143,9 @@ class DTable {
       return;
     }
     let newRowData = RowUtils.convertRowBack(rowData, table);
-    let rowId;
     const rows = view ? View.getViewRows(view, table) : table.rows;
     const lastRow = row.length === 0 ? null : rows[rows.length - 1];
-    rowId = lastRow ? lastRow._id : '';
+    let rowId = lastRow ? lastRow._id : '';
     this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', newRowData);
   }
 
