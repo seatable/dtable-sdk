@@ -136,7 +136,7 @@ class DTable {
     return table.id_row_map[rowId];
   }
 
-  appendRow(table, view, rowData) {
+  appendRow(table, rowData, view = null) {
     let tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
     if (tableIndex === -1) {
@@ -144,15 +144,9 @@ class DTable {
     }
     let newRowData = RowUtils.convertRowBack(rowData, table);
     let rowId;
-    if (view) {
-      const rows = Views.getViewRows(view, table);
-      let lastRow = rows.length === 0 ? null : rows[rows.length - 1];
-      rowId = lastRow ? lastRow._id : '';
-    } else {
-      let rows = table.rows;
-      let lastRow = rows.length === 0 ? null : rows[rows.length - 1];
-      rowId = lastRow ? lastRow._id : '';
-    }
+    const rows = view ? View.getViewRows(view, table) : table.rows;
+    const lastRow = row.length === 0 ? null : rows[rows.length - 1];
+    rowId = lastRow ? lastRow._id : '';
     this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', newRowData);
   }
 
@@ -199,7 +193,7 @@ class DTable {
   }
 
   getRowDataByView(view, table, row_id) {
-    let row_data;
+    let row_data = {};
     if (!Views.isDefaultView(view)) {
       row_data = Views.getRowDataUsedInFilters(view, table, row_id);
     }
