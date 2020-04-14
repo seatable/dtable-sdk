@@ -192,7 +192,7 @@ class DTable {
     return Views.getViewRows(view, table);
   }
 
-  getRowDataByView(view, table, row_id) {
+  getInsertedRowInitData(view, table, row_id) {
     let row_data = {};
     if (!Views.isDefaultView(view)) {
       row_data = Views.getRowDataUsedInFilters(view, table, row_id);
