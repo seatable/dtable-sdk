@@ -187,7 +187,7 @@ class DTable {
     });
   }
 
-  getViewRows = (view, table) => {
+  getViewRows(view, table) {
     return Views.getViewRows(view, table);
   }
 
