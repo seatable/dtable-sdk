@@ -2,7 +2,7 @@
   "name": "dtable-sdk",
   "version": "0.0.30",
   "description": "dtable sdk",
-  "main": "./dist/dtable.js",
+  "main": "./dist/index.js",
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
     "example": "export DEBUG=dtable* && babel-node ./example/example.js",
