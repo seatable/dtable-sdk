@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, Views, TableUtils, RowUtils, CellType, Chart, generatorStatId  } from 'dtable-store';
+import { DTableStore, Views, TableUtils, RowUtils, CellType, Chart, generatorStatId } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import Debug from 'debug';
