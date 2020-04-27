@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, Views, TableUtils, RowUtils, CellType } from 'dtable-store';
+import { DTableStore, Views, TableUtils, RowUtils, CellType, Chart, generatorStatId  } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import Debug from 'debug';
@@ -247,8 +247,13 @@ class DTable {
     this.dtableStore.deletePluginSettings(plugin_name);
   }
 
-}
+  generatorStatId(statItems) {
+    return generatorStatId(statItems);
+  }
 
-export { Chart, generatorStatId } from 'dtable-store'
+  calculateGeolocationBasicChart(statItem, tables) {
+    return Chart.calculateGeolocationBasicChart(statItem, tables);
+  };
+}
 
 export default DTable;
