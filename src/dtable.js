@@ -249,4 +249,6 @@ class DTable {
 
 }
 
+export { Chart, generatorStatId } from 'dtable-store'
+
 export default DTable;
