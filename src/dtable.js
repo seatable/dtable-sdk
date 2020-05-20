@@ -255,8 +255,8 @@ class DTable {
     return Chart.calculateGeolocationBasicChart(statItem, tables);
   };
 
-  calculateMtimeBasicChart(statItem, tables) {
-    return Chart.calculateMtimeBasicChart(statItem, tables);
+  calculateTimeChart(statItem, tables) {
+    return Chart.calculateTimeChart(statItem, tables);
   }
 }
 
