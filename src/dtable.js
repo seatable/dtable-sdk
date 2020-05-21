@@ -254,6 +254,11 @@ class DTable {
   calculateGeolocationBasicChart(statItem, tables) {
     return Chart.calculateGeolocationBasicChart(statItem, tables);
   };
+
+  getTableFormulaResults(table, rows) {
+    const formulaColumns = Views.getAllFormulaColumns(table.columns);
+    return Views.getTableFormulaResults(table, formulaColumns, rows);
+  }
 }
 
 export default DTable;
