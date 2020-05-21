@@ -255,8 +255,9 @@ class DTable {
     return Chart.calculateGeolocationBasicChart(statItem, tables);
   };
 
-  calculateTimeChart(statItem, tables) {
-    return Chart.calculateTimeChart(statItem, tables);
+  getTableFormulaResults(table, rows) {
+    const formulaColumns = Views.getAllFormulaColumns(table.columns);
+    return Views.getTableFormulaResults(table, formulaColumns, rows);
   }
 }
 
