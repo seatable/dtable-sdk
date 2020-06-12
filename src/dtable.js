@@ -143,8 +143,8 @@ class DTable {
       return;
     }
     let newRowData = RowUtils.convertRowBack(rowData, table);
-    const rows = view ? View.getViewRows(view, table) : table.rows;
-    const lastRow = row.length === 0 ? null : rows[rows.length - 1];
+    const rows = view ? this.getViewRows(view, table) : table.rows;
+    const lastRow = rows.length === 0 ? null : rows[rows.length - 1];
     let rowId = lastRow ? lastRow._id : '';
     this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', newRowData);
   }
@@ -172,12 +172,12 @@ class DTable {
       debug(`view ${viewName} does not exist.`);
       return;
     }
-    const rows = Views.getViewRows(view, table);
+    const rows = this.getViewRows(view, table);
 
     const formulaColumns = Views.getAllFormulaColumns(Views.getColumns(view, table));
     let formulaResults = {};
     if (formulaColumns && formulaColumns.length > 0) {
-      Views.updateFormulaRows(view, table, formulaColumns, rows);
+      Views.updateFormulaRows(view, table, formulaColumns, rows, value);
       formulaResults = Views.getFormulaRows(view);
     }
 
@@ -188,7 +188,7 @@ class DTable {
   }
 
   getViewRows(view, table) {
-    return Views.getViewRows(view, table);
+    return Views.getViewRows(view, table, this.dtableStore.value);
   }
 
   getInsertedRowInitData(view, table, row_id) {
@@ -251,13 +251,13 @@ class DTable {
     return generatorStatId(statItems);
   }
 
-  calculateGeolocationBasicChart(statItem, tables) {
-    return Chart.calculateGeolocationBasicChart(statItem, tables);
+  calculateGeolocationBasicChart(statItem) {
+    return Chart.calculateGeolocationBasicChart(statItem, this.dtableStore.value);
   };
 
   getTableFormulaResults(table, rows) {
     const formulaColumns = Views.getAllFormulaColumns(table.columns);
-    return Views.getTableFormulaResults(table, formulaColumns, rows);
+    return Views.getTableFormulaResults(table, formulaColumns, rows, this.dtableStore.value);
   }
 }
 
