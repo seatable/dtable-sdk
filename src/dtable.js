@@ -259,6 +259,14 @@ class DTable {
     const formulaColumns = Views.getAllFormulaColumns(table.columns);
     return Views.getTableFormulaResults(table, formulaColumns, rows, this.dtableStore.value);
   }
+
+  getOptionColors() {
+    return this.dtableStore.SELECT_OPTION_COLORS;
+  }
+
+  getHighlightColors() {
+    return this.dtableStore.HIGHLIGHT_COLORS;
+  }
 }
 
 export default DTable;
