@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, Views, TableUtils, RowUtils, CellType, Chart, generatorStatId } from 'dtable-store';
+import { DTableStore, Views, TableUtils, RowUtils, CellType, Chart, generatorStatId, SELECT_OPTION_COLORS, HIGHLIGHT_COLORS } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import Debug from 'debug';
@@ -261,11 +261,11 @@ class DTable {
   }
 
   getOptionColors() {
-    return this.dtableStore.SELECT_OPTION_COLORS;
+    return SELECT_OPTION_COLORS;
   }
 
   getHighlightColors() {
-    return this.dtableStore.HIGHLIGHT_COLORS;
+    return HIGHLIGHT_COLORS;
   }
 }
 
