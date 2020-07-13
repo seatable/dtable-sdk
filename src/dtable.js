@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, Views, TableUtils, RowUtils, CellType, Chart, generatorStatId } from 'dtable-store';
+import { DTableStore, Views, TableUtils, RowUtils, CellType, Chart, generatorStatId, SELECT_OPTION_COLORS, HIGHLIGHT_COLORS } from 'dtable-store';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import Debug from 'debug';
@@ -258,6 +258,14 @@ class DTable {
   getTableFormulaResults(table, rows) {
     const formulaColumns = Views.getAllFormulaColumns(table.columns);
     return Views.getTableFormulaResults(table, formulaColumns, rows, this.dtableStore.value);
+  }
+
+  getOptionColors() {
+    return SELECT_OPTION_COLORS;
+  }
+
+  getHighlightColors() {
+    return HIGHLIGHT_COLORS;
   }
 }
 
