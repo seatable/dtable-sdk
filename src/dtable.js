@@ -120,7 +120,7 @@ class DTable {
     return shownColumns;
   }
 
-  onDeleteRow(tableIdx, row_id, old_row, upper_row_id) {
+  deleteRow(tableIdx, row_id, old_row, upper_row_id) {
     this.dtableStore.deleteRow(tableIdx, row_id, old_row, upper_row_id);
   }
 
@@ -162,12 +162,6 @@ class DTable {
     let newUpdated = RowUtils.convertRowBack(updated, table);
     this.dtableStore.modifyRow(tableIndex, row._id, newUpdated, null);
   }
-
-  rowGetter(rowIdx, table, viewIdx) {
-    const { views } = table;
-    const view = Views.getViewByIndex(views, viewIdx);
-    return Views.getRow(view, table, rowIdx);
-  };
 
   forEachRow(tableName, viewName, callback) {
     let value = this.dtableStore.value;
