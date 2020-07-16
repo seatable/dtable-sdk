@@ -149,6 +149,10 @@ class DTable {
     this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', newRowData);
   }
 
+  deleteRowById(table, row_id) {
+    this.dtableStore.deleteRowById(table._id, row_id);
+  }
+
   modifyRow(table, row, updated) {
     let tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
