@@ -271,6 +271,23 @@ class DTable {
   getHighlightColors() {
     return HIGHLIGHT_COLORS;
   }
+
+  getLinkCellValue(linkId, table1Id, table2Id, rowId) {
+    return this.dtableStore.getLinkCellValue(linkId, table1Id, table2Id, rowId);
+  }
+
+  getRowsByID(tableId, rowIds) {
+    return this.dtableStore.getRowsByID(tableId, rowIds);
+  }
+
+  getTableById(table_id) {
+    let tables = this.getTables();
+    return TableUtils.getTableById(tables, table_id);
+  }
+
+  getUserCommonInfo(email, avatar_size) {
+    return this.dtableWebAPI.getUserCommonInfo(email, avatar_size);
+  }
 }
 
 export default DTable;
