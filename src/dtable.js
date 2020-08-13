@@ -197,7 +197,7 @@ class DTable {
 
   getInsertedRowInitData(view, table, row_id) {
     let row_data = {};
-    if (!Views.isDefaultView(view)) {
+    if (!Views.isDefaultView(view, table.columns)) {
       row_data = Views.getRowDataUsedInFilters(view, table, row_id);
     }
     return row_data;
