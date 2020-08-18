@@ -160,6 +160,13 @@ class DTable {
       return;
     }
     let newUpdated = RowUtils.convertRowBack(updated, table);
+    let oldData = {};
+    Object.keys(newUpdated).forEach(key => {
+      oldData[key] = row[key];
+    });
+    if (JSON.stringify(oldData) === JSON.stringify(newUpdated)) {
+      return;
+    }
     this.dtableStore.modifyRow(tableIndex, row._id, newUpdated, null);
   }
 
