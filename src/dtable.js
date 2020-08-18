@@ -288,6 +288,78 @@ class DTable {
   getUserCommonInfo(email, avatar_size) {
     return this.dtableWebAPI.getUserCommonInfo(email, avatar_size);
   }
+
+  addTable(tableName) {
+    this.dtableStore.insertTable(tableName);
+  }
+
+  deleteTable(tableName) {
+    const tables = this.getTables();
+    const index = tables.findIndex((table) => {
+      return table.name === tableName
+    });
+    this.dtableStore.deleteTable(index);
+  }
+
+  renameTable(previousName, tableName) {
+    const tables = this.getTables();
+    const index = tables.findIndex((table) => {
+      return table.name === previousName
+    });
+    this.dtableStore.renameTable(index, tableName);
+  }
+
+  addView(tableName, viewName) {
+    const viewData = { name: viewName, type: 'table'};
+    const tables = this.getTables();
+    const index = tables.findIndex((table) => {
+      return table.name === tableName
+    });
+    this.dtableStore.insertView(index, viewData);
+  }
+
+  renameView(tableName, previousName, viewName) {
+    const tables = this.getTables();
+    const index = tables.findIndex((table) => {
+      return table.name === tableName
+    });
+
+    const selectedTable = tables[index];
+
+    const viewIndex = selectedTable.views.findIndex((view) => {
+      return view.name === previousName;
+    });
+    this.dtableStore.renameView(index, viewIndex, viewName);
+  }
+
+  deleteView(tableName, viewName) {
+    const tables = this.getTables();
+    const tableIndex = tables.findIndex((table) => {
+      return table.name === tableName
+    });
+    const selectedTable = tables[tableIndex];
+    const viewIndex = selectedTable.views.findIndex((view) => {
+      return view.name === viewName;
+    });
+    this.dtableStore.deleteView(tableIndex, viewIndex);
+  }
+
+  addRow(tableName) {
+    const tables = this.getTables();
+    const tableIndex = tables.findIndex((table) => {
+      return table.name === tableName
+    });
+
+    const rows = tables[tableIndex].rows;
+    const rowId = rows[rows.length - 1]._id;
+
+    this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', undefined);
+  }
+
+  getGroupRows(view, table) {
+    const value = this.dtableStore.value;
+    return Views.getGroupedRows(view, table, value);
+  }
 }
 
 export default DTable;
