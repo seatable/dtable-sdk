@@ -2,20 +2,23 @@ import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
 import { DTableStore, Views, TableUtils, RowUtils, CellType, Chart, generatorStatId, SELECT_OPTION_COLORS, HIGHLIGHT_COLORS } from 'dtable-store';
+import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
-import Debug from 'debug';
+import Utils from './utils';
 
 const debug = Debug('dtable:sdk');
 
 const ACCESS_TOKEN_INTERVAL_TIME = (3 * 24 * 60 - 1) * 60 * 1000;
 
 class DTable {
+  
   constructor() {
     this.dtableStore = null;
     this.eventBus = null;
     this.dtableWebAPI = null;
     this.dtableServerAPI = null;
+    this.utils = new Utils();
   }
 
   async init(config) {
