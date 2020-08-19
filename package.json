@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
     "example": "export DEBUG=dtable* && babel-node ./example/example.js",
-    "test": "export DEBUG=dtable* && babel-node ./test/complex-test.js",
+    "test": "export DEBUG=dtable* && babel-node ./test/test-complex.js",
+    "test:jest": "jest",
     "build:pkg-js": "./node_modules/.bin/babel src --out-dir dist",
     "build:pkg-bin": "./node_modules/.bin/babel bin --out-dir dist/bin --copy-files",
     "prepublishOnly": "npm run clean && npm run build:pkg-js"
@@ -30,6 +31,10 @@
     "@babel/preset-env": "^7.5.0",
     "@babel/register": "^7.4.4",
     "babel-register": "^6.26.0",
-    "debug": "^4.1.1"
-  }
+    "debug": "^4.1.1",
+    "jest": "^26.4.0"
+  },
+  "jest": {
+    "testRegex": "/test/.*.test.jsx?$"
+ }
 }
