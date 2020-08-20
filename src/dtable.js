@@ -295,10 +295,6 @@ class DTable {
     return TableUtils.getTableById(tables, table_id);
   }
 
-  getUserCommonInfo(email, avatar_size) {
-    return this.dtableWebAPI.getUserCommonInfo(email, avatar_size);
-  }
-
   addTable(tableName) {
     this.dtableStore.insertTable(tableName);
   }
@@ -367,6 +363,7 @@ class DTable {
     const value = this.dtableStore.value;
     return Views.getGroupedRows(view, table, value);
   }
+
 }
 
 export default DTable;
