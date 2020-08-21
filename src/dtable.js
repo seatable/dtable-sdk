@@ -354,16 +354,13 @@ class DTable {
     this.dtableStore.deleteView(tableIndex, viewIndex);
   }
 
-  addRow(tableName) {
-    const tables = this.getTables();
-    const tableIndex = tables.findIndex((table) => {
-      return table.name === tableName
-    });
-
-    const rows = tables[tableIndex].rows;
-    const rowId = rows[rows.length - 1]._id;
-
-    this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', undefined);
+  addRow(tableName, rowData, viewName = null) {
+    const table = this.getTableByName(tableName);
+    let view = null;
+    if (viewName) {
+      view = this.getViewByName(table, viewName);
+    }
+    this.appendRow(table, rowData, view);
   }
 
   getGroupRows(view, table) {
