@@ -1,6 +1,6 @@
 # dtable-sdk
 
-JavaScript SDK for dtable.
+JavaScript SDK for SeaTable (DTable is an old name).
 
 ## Adding to your poject
 
@@ -12,14 +12,14 @@ npm i dtable-sdk --save
 
 ## Basic demo
 
-Prepare a test dtable, just like:
+Prepare a test base, just like:
 
 | Name | Result |
 | ---- | ------ |
 | Mike |        |
 | Judy |        |
 
-Create a dtable with the table name `sayHello` and the view name `Default_View`. Then, add a long text column named `Result`. Add a few rows and create a name for each row. Leave the `Result` column blank.
+Create a base with a table named `sayHello` and a view named `Default_View`. Then, add a long text column named `Result`. Add a few rows and create a name for each row. Leave the `Result` column blank.
 
 Then, generate an APIToken and change the `example/example.json` file like the code below:
 
