@@ -1,15 +1,16 @@
 # dtable-sdk
 
-SDK for dtable.
+JavaScript SDK for dtable.
 
-## Basic demo
+## Adding to your poject
 
-Using npm
-
+Using npm:
 
 ~~~bash
-npm install
+npm i dtable-sdk --save
 ~~~
+
+## Basic demo
 
 Prepare a test dtable, just like:
 
@@ -18,9 +19,9 @@ Prepare a test dtable, just like:
 | Mike |        |
 | Judy |        |
 
-You shoule create a dtable with the table name 'sayHello' and view name 'Default_View'. Then add a new long text column named 'Result'. Add a few rows and enter some names.
+Create a dtable with the table name `sayHello` and the view name `Default_View`. Then, add a long text column named `Result`. Add a few rows and create a name for each row. Leave the `Result` column blank.
 
-Then generate APIToken and change example/example.json file just like below.
+Then, generate an APIToken and change the `example/example.json` file like the code below:
 
 ~~~json
 {
@@ -32,7 +33,7 @@ Then generate APIToken and change example/example.json file just like below.
 }
 ~~~
 
-Run `npm run example` and wait for a few secones, you will see result column is changed.
+Run `npm run example` and wait for a few seconds. You will see result column has changed to something similar to this:
 
 | Name | Result     |
 | ---- | ---------- |
