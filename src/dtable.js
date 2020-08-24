@@ -202,7 +202,7 @@ class DTable {
   }
 
   getViewRows(view, table) {
-    return Views.getViewRows(view, table, this.dtableStore.value);
+    return Views.getViewRows(view, table, this.dtableStore.value).slice();
   }
 
   getInsertedRowInitData(view, table, row_id) {
@@ -366,6 +366,10 @@ class DTable {
   getGroupRows(view, table) {
     const value = this.dtableStore.value;
     return Views.getGroupedRows(view, table, value);
+  }
+
+  getCellValue(row, column) {
+    return row[column.key];
   }
 }
 
