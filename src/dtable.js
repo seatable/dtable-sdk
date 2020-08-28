@@ -363,7 +363,6 @@ class DTable {
     const value = this.dtableStore.value;
     return Views.getGroupedRows(view, table, value);
   }
-
 }
 
 export default DTable;
