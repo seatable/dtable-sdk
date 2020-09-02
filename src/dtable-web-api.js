@@ -22,14 +22,6 @@ class DTableWebAPI {
     return this.req.get(url, { headers: headers, params: params });
   }
 
-  getUserCommonInfo(email, avatarSize) {
-    const url = this.server + '/api/v2.1/user-common-info/' + email;
-    let params = {
-      avatar_size: avatarSize
-    };
-    return this.req.get(url, {params: params});
-  }
-
 }
 
 export default DTableWebAPI;
