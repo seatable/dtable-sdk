@@ -208,7 +208,16 @@ class DTable {
   getInsertedRowInitData(view, table, row_id) {
     let row_data = {};
     if (!Views.isDefaultView(view, table.columns)) {
-      row_data = Views.getRowDataUsedInFilters(view, table, row_id);
+      const value = this.dtableStore.value;
+      const rows = this.getViewRows(view, table);
+      const formulaColumns = Views.getAllFormulaColumns(Views.getColumns(view, table));
+      let formulaResults = {};
+      if (formulaColumns && formulaColumns.length > 0) {
+        Views.updateFormulaRows(view, table, formulaColumns, rows, value);
+        formulaResults = Views.getFormulaRows(view);
+      }
+      let originRowData = Views.getRowDataUsedInFilters(view, table, row_id);
+      row_data = RowUtils.convertRowData(originRowData, value, table, formulaResults);
     }
     return row_data;
   }
