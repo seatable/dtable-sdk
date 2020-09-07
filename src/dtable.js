@@ -219,7 +219,7 @@ class DTable {
       }
 
       // originRowData: {[column.key]: cell_value}, exclude columns: auto_number
-      // row_data, which is converted from originRowData: {[column.name]: cell_value}
+      // row_data, which is converted from originRowData: {[column.name]: converted_cell_value}
       let originRowData = Views.getRowDataUsedInFilters(view, table, row_id);
       row_data = RowUtils.convertRow(originRowData, value, table, view, formulaResults);
     }
