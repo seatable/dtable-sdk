@@ -217,7 +217,7 @@ class DTable {
         formulaResults = Views.getFormulaRows(view);
       }
       let originRowData = Views.getRowDataUsedInFilters(view, table, row_id);
-      row_data = RowUtils.convertRowData(originRowData, value, table, formulaResults);
+      row_data = RowUtils.convertRow(originRowData, value, table, view, formulaResults);
     }
     return row_data;
   }
