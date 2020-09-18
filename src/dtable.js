@@ -156,6 +156,14 @@ class DTable {
     this.dtableStore.deleteRowById(table._id, row_id);
   }
 
+  deleteRowsByIds(table, row_ids) {
+    const tables = this.getTables();
+    const tableIndex = tables.findIndex(t => t._id === table._id);
+    const deleted_rows = [];
+    const upper_row_ids = [];
+    this.dtableStore.deleteRows(tableIndex, row_ids, deleted_rows, upper_row_ids);
+  }
+
   modifyRow(table, row, updated) {
     let tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
