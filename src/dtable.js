@@ -107,8 +107,12 @@ class DTable {
     return table.views;
   }
 
-  getViewByName(table, name) {
-    return table.views.find(view => view.name === name);
+  getViewByName(table, view_name) {
+    return Views.getViewByName(table.views, view_name);
+  }
+
+  getViewById(table, view_id) {
+    return Views.getViewById(table.views, view_id);
   }
 
   getColumns(table) {
@@ -125,6 +129,10 @@ class DTable {
 
   getColumnByName(table, name) {
     return table.columns.find(column => column.name === name);
+  }
+
+  getColumnByKey(table, key) {
+    return table.columns.find(column => column.key === key);
   }
 
   getColumnsByType(table, type) {
@@ -275,6 +283,10 @@ class DTable {
 
   generatorStatId(statItems) {
     return generatorStatId(statItems);
+  }
+
+  calculateChart(statItem) {
+    return Chart.calculateChart(statItem, this.dtableStore.value);
   }
 
   calculateGeolocationBasicChart(statItem) {
