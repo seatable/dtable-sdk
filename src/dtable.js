@@ -1,7 +1,17 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, Views, TableUtils, RowUtils, CellType, Chart, generatorStatId, SELECT_OPTION_COLORS, HIGHLIGHT_COLORS } from 'dtable-store';
+import { DTableStore, 
+  Views, 
+  TableUtils, 
+  RowUtils, 
+  CellType, 
+  Chart, 
+  generatorStatId, 
+  SELECT_OPTION_COLORS, 
+  HIGHLIGHT_COLORS,
+  COLUMNS_ICON_CONFIG 
+} from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
@@ -141,6 +151,10 @@ class DTable {
 
   getCellType() {
     return CellType;
+  }
+
+  getColumnIconConfig() {
+    return COLUMNS_ICON_CONFIG;
   }
 
   getRowById(table, rowId) {
