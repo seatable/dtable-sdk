@@ -221,8 +221,7 @@ class DTable {
     const formulaColumns = Views.getAllFormulaColumns(Views.getColumns(view, table));
     let formulaResults = {};
     if (formulaColumns && formulaColumns.length > 0) {
-      Views.updateFormulaRows(view, table, formulaColumns, rows, value);
-      formulaResults = Views.getFormulaRows(view);
+      formulaResults = Views.getTableFormulaResults(table, formulaColumns, rows, value);
     }
 
     rows.forEach((row) => {
