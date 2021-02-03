@@ -400,6 +400,10 @@ class DTable {
     const value = this.dtableStore.value;
     return Views.getGroupedRows(view, table, value);
   }
+
+  isGroupView(view, columns) {
+    return Views.isGroupView(view, columns);
+  }
 }
 
 export default DTable;
