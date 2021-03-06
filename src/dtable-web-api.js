@@ -23,7 +23,8 @@ class DTableWebAPI {
   }
 
   getTableAssetUploadLink(workspaceID, name) {
-    const url = this.server + '/api/v2.1/workspace/' + workspaceID + '/dtable-asset-upload-link/?name=' + encodeURIComponent(name);
+    const { server } = this.config;
+    const url = server + '/api/v2.1/workspace/' + workspaceID + '/dtable-asset-upload-link/?name=' + encodeURIComponent(name);
     return this.req.get(url);
   }
 
