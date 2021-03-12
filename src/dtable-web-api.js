@@ -28,7 +28,7 @@ class DTableWebAPI {
     return this.req.get(url);
   }
 
-  uploadImage (uploadLink, formData, onUploadProgress = null) {
+  uploadImage(uploadLink, formData, onUploadProgress = null) {
     return (
       axios.create()({
         method: "post",
@@ -37,6 +37,15 @@ class DTableWebAPI {
         onUploadProgress: onUploadProgress
       })
     );
+  }
+
+  getUserCommonInfo(email, avatarSize) {
+    const { server } = this.config;
+    const url = server + '/api/v2.1/user-common-info/' + email;
+    let params = {
+      avatar_size: avatarSize
+    };
+    return this.req.get(url, {params: params});
   }
 
 }
