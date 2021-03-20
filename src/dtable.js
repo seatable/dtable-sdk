@@ -10,7 +10,10 @@ import { DTableStore,
   generatorStatId, 
   SELECT_OPTION_COLORS, 
   HIGHLIGHT_COLORS,
-  COLUMNS_ICON_CONFIG 
+  COLUMNS_ICON_CONFIG,
+  getCellValueDisplayString,
+  getLinkDisplayString,
+  getNumberDisplayString
 } from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
@@ -403,6 +406,18 @@ class DTable {
 
   isGroupView(view, columns) {
     return Views.isGroupView(view, columns);
+  }
+
+  getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
+    return getCellValueDisplayString(row, type, key, {tables, formulaRows, data, collaborators});
+  }
+
+  getLinkDisplayString(rowIds, linkedTable, displayColumnKey = '0000') {
+    return getLinkDisplayString(rowIds, linkedTable, displayColumnKey);
+  }
+
+  getNumberDisplayString(value, columnData) {
+    return getNumberDisplayString(value, columnData);
   }
 }
 
