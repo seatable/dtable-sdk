@@ -326,6 +326,10 @@ class DTable {
     return this.dtableStore.getLinkCellValue(linkId, table1Id, table2Id, rowId);
   }
 
+  getTableLinkRows(rows, table) {
+    return RowUtils.getTableLinkRows(rows, table, this.dtableStore.value);
+  }
+  
   getRowsByID(tableId, rowIds) {
     return this.dtableStore.getRowsByID(tableId, rowIds);
   }
