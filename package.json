@@ -1,6 +1,6 @@
 {
   "name": "dtable-sdk",
-  "version": "0.0.73",
+  "version": "0.0.75",
   "description": "dtable sdk",
   "main": "./dist/index.js",
   "scripts": {
