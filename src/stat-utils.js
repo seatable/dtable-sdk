@@ -1,7 +1,6 @@
 import { Views, 
   TableUtils, 
   getDateByGranularity, 
-  getValidOptionIds,
   getValidCollaborators, 
   isNumber,
   getFormulaDisplayString,
@@ -78,7 +77,10 @@ class StatUtils {
       }
       case CellType.MULTIPLE_SELECT: {
         let options = data && data.options;
-        return getValidOptionIds(options, cellValue);
+        if (!Array.isArray(cellValue)) {
+          return [];
+        }
+        return cellValue.filter(id => options.findIndex(o => o.id === id) > -1);
       }
       case CellType.COLLABORATOR: {
         return getValidCollaborators(cellValue);
