@@ -314,6 +314,10 @@ class DTable {
     return Views.getTableFormulaResults(table, formulaColumns, rows, this.dtableStore.value);
   }
 
+  getViewRowsColor(rows, view, table) {
+    return Views.getRowsColor(rows, view, table, this.dtableStore.value);
+  }
+
   getOptionColors() {
     return SELECT_OPTION_COLORS;
   }
