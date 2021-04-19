@@ -206,7 +206,7 @@ class DTable {
     this.dtableStore.modifyRow(tableIndex, row._id, newUpdated, null);
   }
 
-  forEachRow(tableName, viewName, callback) {
+  forEachRow(tableName, viewName, callback, { username, userId } = {}) {
     let value = this.dtableStore.value;
     let tables = this.getTables();
     let table = TableUtils.getTableByName(tables, tableName);
@@ -219,7 +219,7 @@ class DTable {
       debug(`view ${viewName} does not exist.`);
       return;
     }
-    const rows = this.getViewRows(view, table);
+    const rows = this.getViewRows(view, table, username, userId);
 
     const formulaColumns = Views.getAllFormulaColumns(Views.getColumns(view, table));
     let formulaResults = {};
@@ -233,8 +233,8 @@ class DTable {
     });
   }
 
-  getViewRows(view, table) {
-    return Views.getViewRows(view, table, this.dtableStore.value);
+  getViewRows(view, table, username = null, userId = null) {
+    return Views.getViewRows(view, table, this.dtableStore.value, username, userId);
   }
 
   getInsertedRowInitData(view, table, row_id) {
