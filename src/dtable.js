@@ -13,7 +13,8 @@ import { DTableStore,
   COLUMNS_ICON_CONFIG,
   getCellValueDisplayString,
   getLinkDisplayString,
-  getNumberDisplayString
+  getNumberDisplayString,
+  FORMULA_RESULT_TYPE
 } from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
@@ -154,6 +155,10 @@ class DTable {
 
   getCellType() {
     return CellType;
+  }
+
+  getFormulaResultType() {
+    return FORMULA_RESULT_TYPE;
   }
 
   getColumnIconConfig() {
