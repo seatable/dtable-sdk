@@ -12,8 +12,12 @@ import { DTableStore,
   HIGHLIGHT_COLORS,
   COLUMNS_ICON_CONFIG,
   getCellValueDisplayString,
-  getLinkDisplayString,
   getNumberDisplayString,
+  getGeolocationDisplayString,
+  getDurationDisplayString,
+  getCollaboratorsName,
+  getDateDisplayString,
+  getLinkDisplayString,
   FORMULA_RESULT_TYPE
 } from 'dtable-store';
 import Debug from 'debug';
@@ -432,6 +436,24 @@ class DTable {
   getNumberDisplayString(value, columnData) {
     return getNumberDisplayString(value, columnData);
   }
+
+  getGeolocationDisplayString(value) {
+    return getGeolocationDisplayString(value);
+  }
+
+  getDurationDisplayString(value, columnData) {
+    return getDurationDisplayString(value, columnData);
+  }
+  
+  getDateDisplayString(value, columnData) {
+    const { format } = columnData;
+    return getDateDisplayString(value, format);
+  }
+
+  getCollaboratorsName(collaborators, value) {
+    return getCollaboratorsName(collaborators, value);
+  }
+
 }
 
 export default DTable;
