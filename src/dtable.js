@@ -173,13 +173,13 @@ class DTable {
     return table.id_row_map[rowId];
   }
 
-  appendRow(table, rowData, view = null) {
+  appendRow(table, rowData, view, { collaborators } = {}) {
     let tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
     if (tableIndex === -1) {
       return;
     }
-    let newRowData = RowUtils.convertRowBack(rowData, table);
+    let newRowData = RowUtils.convertRowBack(rowData, table, collaborators);
     const rows = view ? this.getViewRows(view, table) : table.rows;
     const lastRow = rows.length === 0 ? null : rows[rows.length - 1];
     let rowId = lastRow ? lastRow._id : '';
@@ -452,6 +452,28 @@ class DTable {
 
   getCollaboratorsName(collaborators, value) {
     return getCollaboratorsName(collaborators, value);
+  }
+
+  modifyColumnData(table, columnName, columnData) {
+    const tables = this.getTables();
+    let tableIndex = tables.findIndex(t => t._id === table._id);
+    if (tableIndex === -1) {
+      return;
+    }
+    const updateColumn = this.getColumnByName(table, columnName);
+    if (!updateColumn) {
+      return;
+    }
+    this.dtableStore.setColumnData(tableIndex, updateColumn.key, columnData);
+  }
+
+  moveGroupRows(table, targetIds, movePosition, movedRows, upperRowIds, updated, oldRows, groupbyColumn) {
+    const tables = this.getTables();
+    let tableIndex = tables.findIndex(t => t._id === table._id);
+    if (tableIndex === -1) {
+      return;
+    }
+    this.dtableStore.moveGroupRows(tableIndex, targetIds, movePosition, movedRows, upperRowIds, updated, oldRows, groupbyColumn)
   }
 
 }
