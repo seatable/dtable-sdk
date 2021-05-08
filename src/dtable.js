@@ -183,7 +183,7 @@ class DTable {
     const rows = view ? this.getViewRows(view, table) : table.rows;
     const lastRow = rows.length === 0 ? null : rows[rows.length - 1];
     let rowId = lastRow ? lastRow._id : '';
-    this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', newRowData);
+    return this.dtableStore.insertRow(tableIndex, rowId, 'insert_below', newRowData);
   }
 
   deleteRowById(table, row_id) {
@@ -413,7 +413,7 @@ class DTable {
     if (viewName) {
       view = this.getViewByName(table, viewName);
     }
-    this.appendRow(table, rowData, view);
+    return this.appendRow(table, rowData, view);
   }
 
   getGroupRows(view, table) {
