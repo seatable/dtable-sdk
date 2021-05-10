@@ -69,6 +69,19 @@ class DTable {
 
   }
 
+  initDTableApp(config) {
+    this.config = config;
+    const { app_name, access_token, dtable_uuid, dtable_server, dtable_socket } = config;
+    this.config.appName = app_name;
+    this.config.accessToken = access_token;
+    this.config.dtableUuid = dtable_uuid;
+    this.config.dtableServer = dtable_server.replace(/\/+$/, '') + '/';
+    this.config.dtableSocket = dtable_socket.replace(/\/+$/, '') + '/';
+    this.dtableServerAPI = new DTableServerAPI(this.config);
+    this.dtableStore = new DTableStore(this.config);
+    this.eventBus = this.dtableStore.eventBus;
+  }
+
   async syncWithServer() {
     await this.dtableStore.loadFromServer();
     await this.dtableStore.loadRelatedUsers();
@@ -77,6 +90,8 @@ class DTable {
   }
 
   updateDTableAccessToken() {
+    // if dtableWebAPI does not exist, there is no need to refresh access_token
+    if (!this.dtableWebAPI) return;
     setInterval(async () => {
       try {
         let res = await this.dtableWebAPI.getDTableAccessToken();
