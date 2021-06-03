@@ -248,10 +248,11 @@ class DTable {
 
   getInsertedRowInitData(view, table, row_id) {
     let row_data = {};
-    if (!Views.isDefaultView(view, table.columns)) {
+    const value = this.dtableStore.value;
+    if (!Views.isDefaultView(view, table.columns, value)) {
       // originRowData: {[column.key]: cell_value}, exclude columns: auto_number
       // row_data, which is converted from originRowData: {[column.name]: converted_cell_value}
-      const value = this.dtableStore.value;
+
       let originRowData = Views.getRowDataUsedInFilters(view, table, row_id);
       row_data = RowUtils.convertRow(originRowData, value, table, view);
     }
