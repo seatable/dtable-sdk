@@ -1,7 +1,6 @@
 import { Views, 
   TableUtils, 
   getDateByGranularity, 
-  getValidCollaborators, 
   isNumber,
   getFormulaDisplayString,
   getPrecisionNumber, CellType,
@@ -11,6 +10,7 @@ import { Views,
   sortDate, 
   sortSingleSelect, 
   sortFormula,
+  getGeolocationDisplayString
 } from 'dtable-store';
 
 class StatUtils {
@@ -25,13 +25,16 @@ class StatUtils {
     return table.rows;
   }
 
-  static isValidRow(row, formulaRow, linkRow, columnType, columnKey, includeEmpty) {
+  static isValidRow(row, formulaRow, linkRow, column, includeEmpty) {
+    const { type: columnType, key: columnKey } = column;
     if (includeEmpty) return true;
     let cellValue;
     if (columnType === CellType.FORMULA) {
       cellValue = formulaRow ? formulaRow[columnKey] : null;
     } else if (columnType === CellType.GEOLOCATION) {
-      cellValue = row[columnKey] ? row[columnKey].province : null;
+      const value = row[columnKey];
+      const { geo_format } = column.data;
+      return isEmptyGeolocationCell(value, geo_format);
     } else if (columnType === CellType.LINK) {
       cellValue = linkRow ? linkRow[columnKey] : null;
     } else {
@@ -83,7 +86,7 @@ class StatUtils {
         return cellValue.filter(id => options.findIndex(o => o.id === id) > -1);
       }
       case CellType.COLLABORATOR: {
-        return getValidCollaborators(cellValue);
+        return getValidCollaborators(value.collaborators, cellValue);
       }
       case CellType.CREATOR:
       case CellType.LAST_MODIFIER: {
@@ -105,12 +108,20 @@ class StatUtils {
         return formulaCellValue ? formulaCellValue + "" : null;
       }
       case CellType.GEOLOCATION: {
+        const { geo_format } = data || {};
+        if (geo_format === 'country_region' || geo_format === 'lng_lat') {
+          return getGeolocationDisplayString(row[column.key], data);
+        }
         return row[column.key] ? row[column.key][geoGranularity] : null;
       }
       case CellType.LINK: {
         if (!linkRow) return null;
         let linkCellValue = linkRow[key];
         return linkCellValue || [];
+      }
+      case CellType.RATE: {
+        if (!cellValue) return null;
+        return cellValue + '';
       }
       default: {
         return null;
@@ -273,6 +284,24 @@ class StatUtils {
       CellType.LINK
     ].includes(columnType);
   }
+}
+
+const getValidCollaborators = (collaborators, emails) => {
+  if (!Array.isArray(emails)) {
+    return []
+  }
+  return emails.filter(e => collaborators.findIndex(c => c.email === e) > -1);
+};
+
+const isEmptyGeolocationCell = (value, format) => {
+  if (!value) return null;
+  if (format === 'lng_lat') {
+    return value.lng && value.lat;
+  }
+  if (format === 'country_region') {
+    return value.country_region
+  }
+  return value.province;
 }
 
 export default StatUtils;
