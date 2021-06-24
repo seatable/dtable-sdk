@@ -114,6 +114,18 @@ class DTable {
     return TableUtils.getTableByName(tables, name);
   }
 
+  appendTable(table_name, columns, rows) {
+    const tables = this.dtableStore.value.tables;
+    if (tables.length >= 200) throw new Error('Number_of_tables_exceeds_200_limit');
+    if (!table_name) throw new Error('Table_name_is_required');
+    if (!columns) throw new Error('Columns_is_required');
+    if (!Array.isArray(columns)) throw new Error('Columns_must_be_array');
+    if (columns.length === 0) throw new Error('The_number_of_columns_must_be_more_than_0');
+    if (columns.length >= 500) throw new Error('The_number_of_columns_in_the_current_table_exceeds_the_limit');
+    if (rows && !Array.isArray(rows)) throw new Error('Rows_must_be_array');
+    return this.dtableStore.importDataIntoNewTable(table_name, columns, rows);
+  }
+
   getActiveView() {
     let activeTable = this.getActiveTable();
     let views = this.getViews(activeTable);
