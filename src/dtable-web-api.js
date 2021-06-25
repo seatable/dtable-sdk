@@ -7,6 +7,21 @@ class DTableWebAPI {
     this.req = axios.create();
   }
 
+  login() {
+    const { server, username, password } = this.config;
+    const url = server + '/api2/auth-token/';
+    return axios.post(url, {
+      username,
+      password
+    }).then((response) => {
+      this.token = response.data.token;
+      this.req = axios.create({
+        baseURL: server,
+        headers: { 'Authorization': 'Token ' + this.token }
+      });
+    });
+  }
+
   getDTableAccessToken() {
     const { server, APIToken } = this.config;
     const url = server + '/api/v2.1/dtable/app-access-token/';
