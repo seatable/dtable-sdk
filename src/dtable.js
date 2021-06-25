@@ -116,7 +116,7 @@ class DTable {
 
   appendTable(table_name, columns, rows) {
     const tables = this.dtableStore.value.tables;
-    if (tables.length >= 200) throw new Error('Number_of_tables_exceeds_200_limit');
+    if (tables.length >= 200) throw new Error('The_number_of_tables_exceeds_200_limit');
     if (!table_name) throw new Error('Table_name_is_required');
     if (!columns) throw new Error('Columns_is_required');
     if (!Array.isArray(columns)) throw new Error('Columns_must_be_array');
