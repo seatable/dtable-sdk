@@ -114,7 +114,7 @@ class DTable {
     return TableUtils.getTableByName(tables, name);
   }
 
-  appendTable(table_name, columns, rows) {
+  importDataIntoNewTable(table_name, columns, rows) {
     const tables = this.dtableStore.value.tables;
     if (tables.length >= 200) throw new Error('The_number_of_tables_exceeds_200_limit');
     if (!table_name) throw new Error('Table_name_is_required');
