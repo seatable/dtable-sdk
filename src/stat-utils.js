@@ -10,7 +10,8 @@ import { Views,
   sortDate, 
   sortSingleSelect, 
   sortFormula,
-  getGeolocationDisplayString
+  getGeolocationDisplayString,
+  getDateDisplayString
 } from 'dtable-store';
 
 class StatUtils {
@@ -45,7 +46,7 @@ class StatUtils {
   }
 
   static getGroupLabel(
-    row,
+    cellValue,
     formulaRow,
     linkRow,
     column,
@@ -54,7 +55,6 @@ class StatUtils {
     value
   ) {
     let { type, key, data } = column;
-    let cellValue = row[key];
     switch (type) {
       case CellType.TEXT: {
         return cellValue || null;
@@ -76,6 +76,9 @@ class StatUtils {
       case CellType.DATE:
       case CellType.CTIME:
       case CellType.MTIME: {
+        if (!dateGranularity) {
+          return getDateDisplayString(cellValue);
+        }
         return getDateByGranularity(cellValue, dateGranularity);
       }
       case CellType.MULTIPLE_SELECT: {
@@ -94,7 +97,7 @@ class StatUtils {
       }
       case CellType.FORMULA: {
         if (!formulaRow) return "";
-        let formulaCellValue = formulaRow[key];
+        let formulaCellValue = formulaRow[key] || cellValue;
         let { result_type } = data || {};
         if (result_type === FORMULA_RESULT_TYPE.COLUMN) {
           return (
@@ -109,14 +112,14 @@ class StatUtils {
       }
       case CellType.GEOLOCATION: {
         const { geo_format } = data || {};
-        if (geo_format === 'country_region' || geo_format === 'lng_lat') {
-          return getGeolocationDisplayString(row[column.key], data);
+        if (geo_format === 'country_region' || geo_format === 'lng_lat' || !geoGranularity) {
+          return getGeolocationDisplayString(cellValue, data);
         }
-        return row[column.key] ? row[column.key][geoGranularity] : null;
+        return cellValue ? cellValue[geoGranularity] : null;
       }
       case CellType.LINK: {
         if (!linkRow) return null;
-        let linkCellValue = linkRow[key];
+        let linkCellValue = linkRow[key] || cellValue;
         return linkCellValue || [];
       }
       case CellType.RATE: {
