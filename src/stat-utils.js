@@ -1,6 +1,7 @@
-import { Views, 
-  TableUtils, 
-  getDateByGranularity, 
+import {
+  Views, 
+  TableUtils,
+  DateUtils,
   isNumber,
   getFormulaDisplayString,
   getPrecisionNumber, CellType,
@@ -79,7 +80,7 @@ class StatUtils {
         if (!dateGranularity) {
           return getDateDisplayString(cellValue);
         }
-        return getDateByGranularity(cellValue, dateGranularity);
+        return DateUtils.getDateByGranularity(cellValue, dateGranularity);
       }
       case CellType.MULTIPLE_SELECT: {
         let options = data && data.options;
