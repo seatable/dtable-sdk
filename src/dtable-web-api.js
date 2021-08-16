@@ -63,6 +63,29 @@ class DTableWebAPI {
     return this.req.get(url, {params: params});
   }
 
+  addConvertPageTask(workspaceId, dtableName, params) {
+    const { server } = this.config;
+    const url = server + '/api/v2.1/workspace/' + workspaceId + '/dtable/' + encodeURIComponent(dtableName) + '/convert-page/';
+    return this.req.get(url, {params: params});
+  }
+
+  cancelDTableIOTask(taskId, dtable_uuid, task_type) {
+    const { server } = this.config;
+    let url = server + '/api/v2.1/dtable-io-status/';
+    let params = {
+      task_id: taskId,
+      dtable_uuid: dtable_uuid,
+      task_type: task_type
+    };
+    return this.req.delete(url, {params: params});
+  }
+
+  queryDTableIOStatusByTaskId(taskId) {
+    const { server } = this.config;
+    let url = server + '/api/v2.1/dtable-io-status/?task_id=' + taskId;
+    return this.req.get(url);
+  }
+
 }
 
 export default DTableWebAPI;
