@@ -12,7 +12,10 @@ import {
   sortSingleSelect, 
   sortFormula,
   getGeolocationDisplayString,
-  getDateDisplayString
+  getDateDisplayString,
+  getNumberDisplayString,
+  getCellValueDisplayString,
+  RowUtils
 } from 'dtable-store';
 
 class StatUtils {
@@ -46,6 +49,27 @@ class StatUtils {
     return cellValue || cellValue === 0;
   }
 
+  static getLinkDisplayString(rowIds, linkedTable, displayColumnKey = '0000') {
+    return getLinkDisplayString(rowIds, linkedTable, displayColumnKey);
+  }
+
+  static getNumberDisplayString(value, columnData) {
+    return getNumberDisplayString(value, columnData);
+  }
+
+  static getTableFormulaResults(table, rows, value) {
+    const formulaColumns = Views.getAllFormulaColumns(table.columns);
+    return Views.getTableFormulaResults(table, formulaColumns, rows, value);
+  }
+
+  static getTableLinkRows(rows, table, value) {
+    return RowUtils.getTableLinkRows(rows, table, value);
+  }
+
+  static getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
+    return getCellValueDisplayString(row, type, key, {tables, formulaRows, data, collaborators});
+  }
+
   static getGroupLabel(
     cellValue,
     formulaRow,
@@ -64,7 +88,9 @@ class StatUtils {
         if (!cellValue && cellValue !== 0) {
           return null;
         }
-        return getPrecisionNumber(cellValue, data);
+        const number = getPrecisionNumber(cellValue, data);
+        let valueNumber = parseFloat(number);
+        return isNumber(valueNumber) ? getNumberDisplayString(valueNumber, column.data) : valueNumber;
       }
       case CellType.SINGLE_SELECT: {
         let isInvalidValue =
