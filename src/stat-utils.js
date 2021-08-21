@@ -18,6 +18,10 @@ import {
   RowUtils
 } from 'dtable-store';
 
+
+const SUPPORT_SORT_COLUMNS = [CellType.TEXT, CellType.NUMBER, CellType.DATE, CellType.SINGLE_SELECT,
+  CellType.FORMULA, CellType.LINK_FORMULA, CellType.CTIME, CellType.MTIME, CellType.RATE];
+
 class StatUtils {
 
   static getStatisticRows(table, view, value) {
@@ -247,16 +251,14 @@ class StatUtils {
 
   static sortStatistics(statistics, column, sort_key) {
     let { type: column_type, data } = column;
-    const sortableColum = [
-      CellType.TEXT,
-      CellType.NUMBER,
-      CellType.DATE,
-      CellType.SINGLE_SELECT,
-      CellType.FORMULA,
-      CellType.MTIME,
-      CellType.MTIME
-    ];
-    let sortType = "up";
+    let sortType = 'up';
+    let option_id_index_map = {};
+    if (column_type === CellType.SINGLE_SELECT) {
+      const { options } = data || {};
+      Array.isArray(options) && options.forEach((option, index) => {
+        option_id_index_map[option.id] = index;
+      });
+    }
     statistics.sort((currResult, nextResult) => {
       let { [sort_key]: current } = currResult;
       let { [sort_key]: next } = nextResult;
@@ -266,7 +268,7 @@ class StatUtils {
       if (!next && next !== 0) {
         return 1;
       }
-      if (sortableColum.includes(column_type)) {
+      if (SUPPORT_SORT_COLUMNS.includes(column_type)) {
         switch (column_type) {
           case CellType.NUMBER: {
             if (current) {
@@ -284,9 +286,10 @@ class StatUtils {
           }
           case CellType.SINGLE_SELECT:
           case CellType.MULTIPLE_SELECT: {
-            return sortSingleSelect(current, next, sortType, column);
+            return sortSingleSelect(current, next, {sort_type: sortType, option_id_index_map});
           }
-          case CellType.FORMULA: {
+          case CellType.FORMULA:
+          case CellType.LINK_FORMULA: {
             let { result_type } = data || {};
             if (result_type === FORMULA_RESULT_TYPE.NUMBER) {
               if (current) {
