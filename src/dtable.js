@@ -489,6 +489,10 @@ class DTable {
     this.dtableStore.moveGroupRows(tableIndex, targetIds, movePosition, movedRows, upperRowIds, updated, oldRows, groupbyColumn)
   }
 
+  sqlQuery(sql) {
+    return this.dtableStore.dtableAPI.sqlQuery(sql);
+  }
+
 }
 
 export default DTable;
