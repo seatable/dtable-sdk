@@ -1,14 +1,14 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore, 
-  Views, 
-  TableUtils, 
-  RowUtils, 
-  CellType, 
-  Chart, 
-  generatorStatId, 
-  SELECT_OPTION_COLORS, 
+import { DTableStore,
+  Views,
+  TableUtils,
+  RowUtils,
+  CellType,
+  Chart,
+  generatorStatId,
+  SELECT_OPTION_COLORS,
   HIGHLIGHT_COLORS,
   COLUMNS_ICON_CONFIG,
   getCellValueDisplayString,
@@ -30,7 +30,7 @@ const debug = Debug('dtable:sdk');
 const ACCESS_TOKEN_INTERVAL_TIME = (3 * 24 * 60 - 1) * 60 * 1000;
 
 class DTable {
-  
+
   constructor() {
     this.dtableStore = null;
     this.eventBus = null;
@@ -135,6 +135,11 @@ class DTable {
 
   getViews(table) {
     return table.views;
+  }
+
+  getNonArchiveViews(table) {
+    const allViews = this.getViews(table);
+    return allViews.filter(view => !Views.isArchiveView(view));
   }
 
   getViewByName(table, view_name) {
