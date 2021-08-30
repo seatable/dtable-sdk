@@ -18,7 +18,8 @@ import { DTableStore,
   getCollaboratorsName,
   getDateDisplayString,
   getLinkDisplayString,
-  FORMULA_RESULT_TYPE
+  FORMULA_RESULT_TYPE,
+  TABLE_PERMISSION_TYPE,
 } from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
@@ -496,6 +497,10 @@ class DTable {
 
   sqlQuery(sql) {
     return this.dtableStore.dtableAPI.sqlQuery(sql);
+  }
+
+  getTablePermissionType() {
+    return TABLE_PERMISSION_TYPE;
   }
 
 }
