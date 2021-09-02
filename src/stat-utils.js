@@ -62,8 +62,7 @@ class StatUtils {
   }
 
   static getTableFormulaResults(table, rows, value) {
-    const formulaColumns = Views.getAllFormulaColumns(table.columns);
-    return Views.getTableFormulaResults(table, formulaColumns, rows, value);
+    return Views.getTableFormulaResults(table, rows, value);
   }
 
   static getTableLinkRows(rows, table, value) {
