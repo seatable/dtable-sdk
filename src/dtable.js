@@ -251,7 +251,7 @@ class DTable {
     const formulaColumns = Views.getAllFormulaColumns(Views.getColumns(view, table));
     let formulaResults = {};
     if (formulaColumns && formulaColumns.length > 0) {
-      formulaResults = Views.getTableFormulaResults(table, formulaColumns, rows, value);
+      formulaResults = Views.getTableFormulaResults(table, rows, value, formulaColumns);
     }
 
     rows.forEach((row) => {
@@ -339,7 +339,7 @@ class DTable {
 
   getTableFormulaResults(table, rows) {
     const formulaColumns = Views.getAllFormulaColumns(table.columns);
-    return Views.getTableFormulaResults(table, formulaColumns, rows, this.dtableStore.value);
+    return Views.getTableFormulaResults(table, rows, this.dtableStore.value, formulaColumns);
   }
 
   getViewRowsColor(rows, view, table) {
