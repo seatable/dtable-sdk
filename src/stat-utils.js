@@ -38,7 +38,7 @@ class StatUtils {
     const { type: columnType, key: columnKey } = column;
     if (includeEmpty) return true;
     let cellValue;
-    if (columnType === CellType.FORMULA) {
+    if (columnType === CellType.FORMULA || columnType === CellType.LINK_FORMULA) {
       cellValue = formulaRow ? formulaRow[columnKey] : null;
     } else if (columnType === CellType.GEOLOCATION) {
       const value = row[columnKey];
@@ -125,9 +125,10 @@ class StatUtils {
       case CellType.LAST_MODIFIER: {
         return cellValue ? cellValue : null;
       }
+      case CellType.LINK_FORMULA:
       case CellType.FORMULA: {
         if (!formulaRow) return "";
-        let formulaCellValue = formulaRow[key] || cellValue;
+        let formulaCellValue = formulaRow[key];
         let { result_type } = data || {};
         if (result_type === FORMULA_RESULT_TYPE.COLUMN) {
           return (
@@ -308,6 +309,24 @@ class StatUtils {
       }
     });
   }
+
+  static sortStatisticData(statistics, sort_type) {
+    statistics.sort((currResult, nextResult) => {
+      let { value: current } = currResult;
+      let { value: next } = nextResult;
+      if (!current && current !== 0) {
+        return -1;
+      }
+      if (!next && next !== 0) {
+        return 1;
+      }
+      if (sort_type === 'ascending') {
+        return current > next ? 1 : -1;
+      } else {
+        return current > next ? -1 : 1;
+      }
+    });
+  };
 
   static isArrayCellValue(columnType) {
     return [
