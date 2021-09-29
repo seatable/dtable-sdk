@@ -15,6 +15,7 @@ import {
   getDateDisplayString,
   getNumberDisplayString,
   getCellValueDisplayString,
+  getLinkDisplayString,
   RowUtils
 } from 'dtable-store';
 
