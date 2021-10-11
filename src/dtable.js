@@ -18,7 +18,6 @@ import { DTableStore,
   getCollaboratorsName,
   getDateDisplayString,
   getLinkDisplayString,
-  getFormulaDisplayString,
   FORMULA_RESULT_TYPE,
   TABLE_PERMISSION_TYPE,
 } from 'dtable-store';
@@ -451,10 +450,6 @@ class DTable {
 
   getLinkDisplayString(rowIds, linkedTable, displayColumnKey = '0000') {
     return getLinkDisplayString(rowIds, linkedTable, displayColumnKey);
-  }
-
-  getFormulaDisplayString(cellValue, columnData, { tables = [], collaborators = [] } = {}) {
-    return getFormulaDisplayString(cellValue, columnData, { tables, collaborators });
   }
 
   getNumberDisplayString(value, columnData) {
