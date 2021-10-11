@@ -456,8 +456,8 @@ class DTable {
     return getNumberDisplayString(value, columnData);
   }
 
-  getGeolocationDisplayString(value) {
-    return getGeolocationDisplayString(value);
+  getGeolocationDisplayString(value, columnData) {
+    return getGeolocationDisplayString(value, columnData);
   }
 
   getDurationDisplayString(value, columnData) {
