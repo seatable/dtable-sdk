@@ -64,7 +64,6 @@ export default App;
 `import config from './settings';`
 
 3. 引入 dtable-sdk 提供的 DTable 接口对象
-
 `import DTable from 'dtable-sdk';`
 
 4. 创建 DTable 对象实例
@@ -96,7 +95,7 @@ class App extends React.Component {
 export default App;
 ```
 
-5. 初始化 DTable 配置参数, 建立与 base 的链接
+5. 初始化 dtable 配置参数, 建立与 base 的链接
 
 ```
 import React from 'react';
@@ -118,7 +117,7 @@ class App extends React.Component {
     // 初始化 dtable 的配置参数
     await this.dtable.init(config);
 
-    // 与 base 建立链接
+    // 建立与 base 的链接
     await this.dtable.syncWithServer();
   }
 
@@ -161,6 +160,7 @@ class App extends React.Component {
     await this.dtable.syncWithServer();
 
     // 获取 base 中的数据
+    const tables = this.dtable.getTables();
     const activeTable = this.dtable.getActiveTable();
     const views = this.dtable.getViews(activeTable);
     const columns = this.dtable.getColumns(activeTable);
@@ -213,7 +213,7 @@ export default App;
 
 ### 运行测试
 
-执行 `npm start`, 可以在打开的页面中看到 base 中 子表的信息, 子表中视图的信息, 子表中列的信息
+执行 `npm start`, 可以在打开的页面中看到 base 中子表的信息, 子表中视图的信息, 子表中列的信息
 
 其他 dtable-sdk api 使用, 可以参照文档进行相关测试和使用
 
