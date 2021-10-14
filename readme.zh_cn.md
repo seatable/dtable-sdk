@@ -16,7 +16,7 @@ dtable-sdk 是一个获取 seatable 中 base 数据的函数库, 通过接口函
 `npm install dtable-sdk --save`
 
 ### 创建测试数据
-1. 登录 https://dev.seatable.cn/ 网站(如无账号, 请注册账号后, 再登录)
+1. 登录 https://colud.seatable.cn/ 网站(如无账号, 请注册账号后, 再登录)
 2. 点击 添加表格按钮, 创建 base "dtable-sdk"
 3. 选中 base "dtable-sdk", 右侧有一个 "更多" 图标
 4. 点击 "更多", 选中 "高级", 选中 "API token" 并点击
@@ -31,14 +31,10 @@ dtable-sdk 是一个获取 seatable 中 base 数据的函数库, 通过接口函
 
 ```
 export default {
-  "server": "https://dev.seatable.cn",                       // 访问 base 所在的 域名
+  "server": "https://cloud.seatable.cn",                     // 访问 base 所在的 域名
   "APIToken": "50c17897ae8b1c7c428d459fc2c379a9bc3806cc",    // 基于 base 创建的 api token
-  "workspaceID": "7",                                        // 当前 base 所在的 workspace 的 ID 值 
-  "dtableName": "dtable-sdk",                                // 当前 base 的名称
-  "lang": "zh-cn"                                            // 应用使用的语言(国际化方案请参见参考模版)
 }
 
-注: workspaceID 的值获取方式: 打开base 在 URL 中如 "https://dev.seatable.cn/workspace/7/dtable/dtable-sdk/?tid=0000&vid=0000", workspace 后面的 "7" 即为 当前 base 所在的 workspace 的 ID 值
 ```
 
 ### 基于 dtable-sdk 提供的接口函数进行开发
@@ -217,6 +213,6 @@ export default App;
 
 其他 dtable-sdk api 使用, 可以参照文档进行相关测试和使用
 
-## 参考模板
+## 其他参考模板
 
 [插件开发模板](https://github.com/seatable/seatable-plugin-template)
