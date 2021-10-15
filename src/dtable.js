@@ -339,7 +339,7 @@ class DTable {
 
   getTableFormulaResults(table, rows) {
     const formulaColumns = Views.getAllFormulaColumns(table.columns);
-    return Views.getTableFormulaResults(table, formulaColumns, rows, this.dtableStore.value);
+    return Views.getTableFormulaResults(table, rows, this.dtableStore.value, formulaColumns);
   }
 
   getViewRowsColor(rows, view, table) {
