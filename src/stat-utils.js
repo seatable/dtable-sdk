@@ -128,19 +128,16 @@ class StatUtils {
       }
       case CellType.LINK_FORMULA:
       case CellType.FORMULA: {
-        if (!formulaRow) return "";
+        if (!formulaRow) return '';
         let formulaCellValue = formulaRow[key];
         let { result_type } = data || {};
-        if (result_type === FORMULA_RESULT_TYPE.COLUMN) {
-          return (
-            getFormulaDisplayString(formulaCellValue, data, {
-              tables: value.tables
-            }) || null
-          );
-        } else if (result_type === FORMULA_RESULT_TYPE.NUMBER) {
+        if (result_type === FORMULA_RESULT_TYPE.ARRAY) {
+          return getFormulaDisplayString(formulaCellValue, data, {tables: value.tables}) || null;
+        }
+        if (result_type === FORMULA_RESULT_TYPE.NUMBER) {
           return getPrecisionNumber(formulaCellValue, data);
         }
-        return formulaCellValue ? formulaCellValue + "" : null;
+        return formulaCellValue ? formulaCellValue + '' : null;
       }
       case CellType.GEOLOCATION: {
         const { geo_format } = data || {};
