@@ -444,6 +444,16 @@ class DTable {
     return Views.isGroupView(view, columns);
   }
 
+  isDefaultView(view, columns) {
+    const value = this.dtableStore.value;
+    return Views.isDefaultView(view, columns, value);
+  }
+
+  isFilterView(view, columns) {
+    const value = this.dtableStore.value;
+    return Views.isFilterView(view, columns, value);
+  }
+
   getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
     return getCellValueDisplayString(row, type, key, {tables, formulaRows, data, collaborators});
   }
