@@ -6,7 +6,6 @@ import { DTableStore,
   TableUtils,
   RowUtils,
   CellType,
-  Chart,
   generatorStatId,
   SELECT_OPTION_COLORS,
   HIGHLIGHT_COLORS,
@@ -328,14 +327,6 @@ class DTable {
   generatorStatId(statItems) {
     return generatorStatId(statItems);
   }
-
-  calculateChart(statItem) {
-    return Chart.calculateChart(statItem, this.dtableStore.value);
-  }
-
-  calculateGeolocationBasicChart(statItem) {
-    return Chart.calculateGeolocationBasicChart(statItem, this.dtableStore.value);
-  };
 
   getTableFormulaResults(table, rows) {
     const formulaColumns = Views.getAllFormulaColumns(table.columns);
