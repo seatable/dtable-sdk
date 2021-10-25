@@ -2,26 +2,52 @@ import {
   Views, 
   TableUtils,
   DateUtils,
-  isNumber,
-  getFormulaDisplayString,
-  getPrecisionNumber, CellType,
-  STATISTICS_COUNT_TYPE, 
-  FORMULA_RESULT_TYPE, 
-  sortText, sortNumber, 
-  sortDate, 
-  sortSingleSelect, 
+  RowUtils,
+  isNumber, 
+  CellType,
+  FORMULA_RESULT_TYPE,
+  sortText,
+  sortNumber,
+  sortDate,
+  sortSingleSelect,
   sortFormula,
+  getPrecisionNumber,
+  getFormulaDisplayString,
   getGeolocationDisplayString,
   getDateDisplayString,
   getNumberDisplayString,
   getCellValueDisplayString,
   getLinkDisplayString,
-  RowUtils
 } from 'dtable-store';
 
+const STATISTICS_COUNT_TYPE = {
+  COUNT: 'count',
+  ADVANCED: 'advanced',
+  DAY: 'day',
+  WEEK: 'week',
+  QUARTAR: 'quartar',
+  MONTH: 'month',
+  YEAR: 'year',
+  SUM: 'Sum',
+  MAX: 'Max',
+  MIN: 'Min',
+  MEAN: 'Mean',
+  PROVINCE: 'province',
+  CITY: 'city',
+  DISTRICT: 'district'
+};
 
-const SUPPORT_SORT_COLUMNS = [CellType.TEXT, CellType.NUMBER, CellType.DATE, CellType.SINGLE_SELECT,
-  CellType.FORMULA, CellType.LINK_FORMULA, CellType.CTIME, CellType.MTIME, CellType.RATE];
+const SUPPORT_SORT_COLUMNS = [
+  CellType.TEXT, 
+  CellType.NUMBER, 
+  CellType.DATE, 
+  CellType.SINGLE_SELECT,
+  CellType.FORMULA, 
+  CellType.LINK_FORMULA, 
+  CellType.CTIME, 
+  CellType.MTIME, 
+  CellType.RATE
+];
 
 class StatUtils {
 
