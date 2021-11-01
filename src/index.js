@@ -1,8 +1,10 @@
 import Dtable from './dtable';
-import { COLUMNS_ICON_CONFIG, CellType as CELL_TYPE,
+import { 
+  CellType as CELL_TYPE,
   COLUMN_OPTIONS,
+  COLUMNS_ICON_CONFIG, 
+  FORMULA_RESULT_TYPE,
   formatDurationToNumber,
-  FORMULA_RESULT_TYPE
 } from 'dtable-store';
 import StatUtils from './stat-utils';
 
