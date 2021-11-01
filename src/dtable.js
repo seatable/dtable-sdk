@@ -266,11 +266,11 @@ class DTable {
   getInsertedRowInitData(view, table, row_id) {
     let row_data = {};
     const value = this.dtableStore.value;
-    if (!Views.isDefaultView(view, table.columns, value)) {
+    if (!Views.isDefaultView(view, table.columns)) {
       // originRowData: {[column.key]: cell_value}, exclude columns: auto_number
       // row_data, which is converted from originRowData: {[column.name]: converted_cell_value}
 
-      let originRowData = Views.getRowDataUsedInFilters(view, table, row_id, value);
+      let originRowData = Views.getRowDataUsedInFilters(view, table, row_id);
       row_data = RowUtils.convertRow(originRowData, value, table, view);
     }
     return row_data;
@@ -436,13 +436,11 @@ class DTable {
   }
 
   isDefaultView(view, columns) {
-    const value = this.dtableStore.value;
-    return Views.isDefaultView(view, columns, value);
+    return Views.isDefaultView(view, columns);
   }
 
   isFilterView(view, columns) {
-    const value = this.dtableStore.value;
-    return Views.isFilterView(view, columns, value);
+    return Views.isFilterView(view, columns);
   }
 
   getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
