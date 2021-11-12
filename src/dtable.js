@@ -100,18 +100,74 @@ class DTable {
     return this.dtableStore.collaborators;
   }
 
-  getActiveTable() {
-    let tables = this.getTables();
-    return this.dtableStore.currentTable || tables[0];
+  uploadFile(filePath, callback) {
+    this.dtableWebAPI.getFileUploadLink().then(res => {
+      let uploadLink = res.data.upload_link + '?ret-json=1';
+      let parentPath = res.data.parent_path;
+      let relativePath = 'files';
+      let formData = new FormData();
+      formData.append('parent_dir', parentPath);
+      formData.append('relative_path', relativePath);
+      formData.append('file', fs.createReadStream(filePath));
+      formData.getLength((err, length) => {
+        if (err) {
+          callback(err);
+        } else {
+          let headers = Object.assign({'Content-Length': length}, formData.getHeaders());
+          axios.post(uploadLink, formData, { headers: headers}).then(res => {
+            // add file url
+            let fileInfo = res.data[0];
+            let { server, workspaceID } = this.config;
+            let url = server + '/workspace/' + workspaceID + parentPath + '/' + relativePath + '/' + encodeURIComponent(fileInfo.name);
+            fileInfo.url = url;
+            callback(false, fileInfo);
+          }).catch(err => {
+            callback(err);
+          });
+        }
+      });
+    }).catch(err => {
+      callback(err);
+    });
+  }
+
+  addTable(tableName) {
+    this.dtableStore.insertTable(tableName);
+  }
+
+  deleteTable(tableName) {
+    const tables = this.getTables();
+    const index = tables.findIndex((table) => {
+      return table.name === tableName
+    });
+    this.dtableStore.deleteTable(index);
+  }
+
+  renameTable(previousName, tableName) {
+    const tables = this.getTables();
+    const index = tables.findIndex((table) => {
+      return table.name === previousName
+    });
+    this.dtableStore.renameTable(index, tableName);
   }
 
   getTables() {
     return this.dtableStore.value.tables;
   }
 
+  getActiveTable() {
+    let tables = this.getTables();
+    return this.dtableStore.currentTable || tables[0];
+  }
+
   getTableByName(name) {
     let tables = this.getTables();
     return TableUtils.getTableByName(tables, name);
+  }
+
+  getTableById(table_id) {
+    let tables = this.getTables();
+    return TableUtils.getTableById(tables, table_id);
   }
 
   importDataIntoNewTable(table_name, columns, rows) {
@@ -126,11 +182,39 @@ class DTable {
     return this.dtableStore.importDataIntoNewTable(table_name, columns, rows);
   }
 
-  getActiveView() {
-    let activeTable = this.getActiveTable();
-    let views = this.getViews(activeTable);
-    let active_index = this.dtableStore.view_index;
-    return views[active_index] || views[0];
+  addView(tableName, viewName) {
+    const viewData = { name: viewName, type: 'table'};
+    const tables = this.getTables();
+    const index = tables.findIndex((table) => {
+      return table.name === tableName
+    });
+    this.dtableStore.insertView(index, viewData);
+  }
+
+  deleteView(tableName, viewName) {
+    const tables = this.getTables();
+    const tableIndex = tables.findIndex((table) => {
+      return table.name === tableName
+    });
+    const selectedTable = tables[tableIndex];
+    const viewIndex = selectedTable.views.findIndex((view) => {
+      return view.name === viewName;
+    });
+    this.dtableStore.deleteView(tableIndex, viewIndex);
+  }
+
+  renameView(tableName, previousName, viewName) {
+    const tables = this.getTables();
+    const index = tables.findIndex((table) => {
+      return table.name === tableName
+    });
+
+    const selectedTable = tables[index];
+
+    const viewIndex = selectedTable.views.findIndex((view) => {
+      return view.name === previousName;
+    });
+    this.dtableStore.renameView(index, viewIndex, viewName);
   }
 
   getViews(table) {
@@ -142,12 +226,31 @@ class DTable {
     return allViews.filter(view => !Views.isArchiveView(view));
   }
 
+  getActiveView() {
+    let activeTable = this.getActiveTable();
+    let views = this.getViews(activeTable);
+    let active_index = this.dtableStore.view_index;
+    return views[active_index] || views[0];
+  }
+
   getViewByName(table, view_name) {
     return Views.getViewByName(table.views, view_name);
   }
 
   getViewById(table, view_id) {
     return Views.getViewById(table.views, view_id);
+  }
+
+  isGroupView(view, columns) {
+    return Views.isGroupView(view, columns);
+  }
+
+  isDefaultView(view, columns) {
+    return Views.isDefaultView(view, columns);
+  }
+
+  isFilterView(view, columns) {
+    return Views.isFilterView(view, columns);
   }
 
   getColumns(table) {
@@ -174,20 +277,26 @@ class DTable {
     return this.getColumns(table).filter((item) => item.type === type);
   }
 
-  getCellType() {
-    return CellType;
+  modifyColumnData(table, columnName, columnData) {
+    const tables = this.getTables();
+    let tableIndex = tables.findIndex(t => t._id === table._id);
+    if (tableIndex === -1) {
+      return;
+    }
+    const updateColumn = this.getColumnByName(table, columnName);
+    if (!updateColumn) {
+      return;
+    }
+    this.dtableStore.setColumnData(tableIndex, updateColumn.key, columnData);
   }
 
-  getFormulaResultType() {
-    return FORMULA_RESULT_TYPE;
-  }
-
-  getColumnIconConfig() {
-    return COLUMNS_ICON_CONFIG;
-  }
-
-  getRowById(table, rowId) {
-    return table.id_row_map[rowId];
+  addRow(tableName, rowData, viewName = null) {
+    const table = this.getTableByName(tableName);
+    let view = null;
+    if (viewName) {
+      view = this.getViewByName(table, viewName);
+    }
+    return this.appendRow(table, rowData, view);
   }
 
   appendRow(table, rowData, view, { collaborators } = {}) {
@@ -259,8 +368,17 @@ class DTable {
     });
   }
 
+  getTableLinkRows(rows, table) {
+    return RowUtils.getTableLinkRows(rows, table, this.dtableStore.value);
+  }
+
   getViewRows(view, table, username = null, userId = null) {
     return Views.getViewRows(view, table, this.dtableStore.value, username, userId);
+  }
+
+  getGroupRows(view, table) {
+    const value = this.dtableStore.value;
+    return Views.getGroupedRows(view, table, value);
   }
 
   getInsertedRowInitData(view, table, row_id) {
@@ -276,39 +394,25 @@ class DTable {
     return row_data;
   }
 
-  getRowCommentCount(rowID) {
-    return this.dtableServerAPI.getRowCommentsCount(rowID);
+  getRowsByID(tableId, rowIds) {
+    return this.dtableStore.getRowsByID(tableId, rowIds);
   }
 
-  uploadFile(filePath, callback) {
-    this.dtableWebAPI.getFileUploadLink().then(res => {
-      let uploadLink = res.data.upload_link + '?ret-json=1';
-      let parentPath = res.data.parent_path;
-      let relativePath = 'files';
-      let formData = new FormData();
-      formData.append('parent_dir', parentPath);
-      formData.append('relative_path', relativePath);
-      formData.append('file', fs.createReadStream(filePath));
-      formData.getLength((err, length) => {
-        if (err) {
-          callback(err);
-        } else {
-          let headers = Object.assign({'Content-Length': length}, formData.getHeaders());
-          axios.post(uploadLink, formData, { headers: headers}).then(res => {
-            // add file url
-            let fileInfo = res.data[0];
-            let { server, workspaceID } = this.config;
-            let url = server + '/workspace/' + workspaceID + parentPath + '/' + relativePath + '/' + encodeURIComponent(fileInfo.name);
-            fileInfo.url = url;
-            callback(false, fileInfo);
-          }).catch(err => {
-            callback(err);
-          });
-        }
-      });
-    }).catch(err => {
-      callback(err);
-    });
+  getRowById(table, rowId) {
+    return table.id_row_map[rowId];
+  }
+
+  moveGroupRows(table, targetIds, movePosition, movedRows, upperRowIds, updated, oldRows, groupbyColumn) {
+    const tables = this.getTables();
+    let tableIndex = tables.findIndex(t => t._id === table._id);
+    if (tableIndex === -1) {
+      return;
+    }
+    this.dtableStore.moveGroupRows(tableIndex, targetIds, movePosition, movedRows, upperRowIds, updated, oldRows, groupbyColumn)
+  }
+
+  getRowCommentCount(rowID) {
+    return this.dtableServerAPI.getRowCommentsCount(rowID);
   }
 
   getPluginSettings(plugin_name) {
@@ -337,6 +441,18 @@ class DTable {
     return Views.getRowsColor(rows, view, table, this.dtableStore.value);
   }
 
+  getCellType() {
+    return CellType;
+  }
+
+  getFormulaResultType() {
+    return FORMULA_RESULT_TYPE;
+  }
+
+  getColumnIconConfig() {
+    return COLUMNS_ICON_CONFIG;
+  }
+
   getOptionColors() {
     return SELECT_OPTION_COLORS;
   }
@@ -345,102 +461,12 @@ class DTable {
     return HIGHLIGHT_COLORS;
   }
 
+  getTablePermissionType() {
+    return TABLE_PERMISSION_TYPE;
+  }
+
   getLinkCellValue(linkId, table1Id, table2Id, rowId) {
     return this.dtableStore.getLinkCellValue(linkId, table1Id, table2Id, rowId);
-  }
-
-  getTableLinkRows(rows, table) {
-    return RowUtils.getTableLinkRows(rows, table, this.dtableStore.value);
-  }
-  
-  getRowsByID(tableId, rowIds) {
-    return this.dtableStore.getRowsByID(tableId, rowIds);
-  }
-
-  getTableById(table_id) {
-    let tables = this.getTables();
-    return TableUtils.getTableById(tables, table_id);
-  }
-
-  addTable(tableName) {
-    this.dtableStore.insertTable(tableName);
-  }
-
-  deleteTable(tableName) {
-    const tables = this.getTables();
-    const index = tables.findIndex((table) => {
-      return table.name === tableName
-    });
-    this.dtableStore.deleteTable(index);
-  }
-
-  renameTable(previousName, tableName) {
-    const tables = this.getTables();
-    const index = tables.findIndex((table) => {
-      return table.name === previousName
-    });
-    this.dtableStore.renameTable(index, tableName);
-  }
-
-  addView(tableName, viewName) {
-    const viewData = { name: viewName, type: 'table'};
-    const tables = this.getTables();
-    const index = tables.findIndex((table) => {
-      return table.name === tableName
-    });
-    this.dtableStore.insertView(index, viewData);
-  }
-
-  renameView(tableName, previousName, viewName) {
-    const tables = this.getTables();
-    const index = tables.findIndex((table) => {
-      return table.name === tableName
-    });
-
-    const selectedTable = tables[index];
-
-    const viewIndex = selectedTable.views.findIndex((view) => {
-      return view.name === previousName;
-    });
-    this.dtableStore.renameView(index, viewIndex, viewName);
-  }
-
-  deleteView(tableName, viewName) {
-    const tables = this.getTables();
-    const tableIndex = tables.findIndex((table) => {
-      return table.name === tableName
-    });
-    const selectedTable = tables[tableIndex];
-    const viewIndex = selectedTable.views.findIndex((view) => {
-      return view.name === viewName;
-    });
-    this.dtableStore.deleteView(tableIndex, viewIndex);
-  }
-
-  addRow(tableName, rowData, viewName = null) {
-    const table = this.getTableByName(tableName);
-    let view = null;
-    if (viewName) {
-      view = this.getViewByName(table, viewName);
-    }
-    return this.appendRow(table, rowData, view);
-  }
-
-  getGroupRows(view, table) {
-    const value = this.dtableStore.value;
-    return Views.getGroupedRows(view, table, value);
-  }
-
-  isGroupView(view, columns) {
-    return Views.isGroupView(view, columns);
-  }
-
-  isDefaultView(view, columns) {
-    return Views.isDefaultView(view, columns);
-  }
-
-  isFilterView(view, columns) {
-    return Views.isFilterView(view, columns);
   }
 
   getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
@@ -472,34 +498,8 @@ class DTable {
     return getCollaboratorsName(collaborators, value);
   }
 
-  modifyColumnData(table, columnName, columnData) {
-    const tables = this.getTables();
-    let tableIndex = tables.findIndex(t => t._id === table._id);
-    if (tableIndex === -1) {
-      return;
-    }
-    const updateColumn = this.getColumnByName(table, columnName);
-    if (!updateColumn) {
-      return;
-    }
-    this.dtableStore.setColumnData(tableIndex, updateColumn.key, columnData);
-  }
-
-  moveGroupRows(table, targetIds, movePosition, movedRows, upperRowIds, updated, oldRows, groupbyColumn) {
-    const tables = this.getTables();
-    let tableIndex = tables.findIndex(t => t._id === table._id);
-    if (tableIndex === -1) {
-      return;
-    }
-    this.dtableStore.moveGroupRows(tableIndex, targetIds, movePosition, movedRows, upperRowIds, updated, oldRows, groupbyColumn)
-  }
-
   sqlQuery(sql) {
     return this.dtableStore.dtableAPI.sqlQuery(sql);
-  }
-
-  getTablePermissionType() {
-    return TABLE_PERMISSION_TYPE;
   }
 
 }
