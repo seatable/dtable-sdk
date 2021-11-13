@@ -5,7 +5,6 @@ import {
   COLUMNS_ICON_CONFIG, 
   FORMULA_RESULT_TYPE,
   SELECT_OPTION_COLORS,
-  HIGHLIGHT_COLORS,
   TABLE_PERMISSION_TYPE,
   formatDurationToNumber,
 } from 'dtable-store';
@@ -18,7 +17,6 @@ export {
   COLUMNS_ICON_CONFIG, 
   FORMULA_RESULT_TYPE,
   SELECT_OPTION_COLORS,
-  HIGHLIGHT_COLORS,
   TABLE_PERMISSION_TYPE, 
   formatDurationToNumber,
   StatUtils, 
