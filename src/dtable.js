@@ -440,27 +440,51 @@ class DTable {
   getViewRowsColor(rows, view, table) {
     return Views.getRowsColor(rows, view, table, this.dtableStore.value);
   }
-
+  
+  /**
+   * @deprecated
+   * @returns CellType
+   */
   getCellType() {
     return CellType;
   }
 
+  /**
+   * @deprecated
+   * @returns FORMULA_RESULT_TYPE
+   */
   getFormulaResultType() {
     return FORMULA_RESULT_TYPE;
   }
 
+  /**
+   * @deprecated
+   * @returns COLUMNS_ICON_CONFIG
+   */
   getColumnIconConfig() {
     return COLUMNS_ICON_CONFIG;
   }
 
+  /**
+   * @deprecated
+   * @returns SELECT_OPTION_COLORS
+   */
   getOptionColors() {
     return SELECT_OPTION_COLORS;
   }
 
+  /**
+   * @deprecated
+   * @returns HIGHLIGHT_COLORS
+   */
   getHighlightColors() {
     return HIGHLIGHT_COLORS;
   }
 
+  /**
+   * @deprecated
+   * @returns TABLE_PERMISSION_TYPE
+   */
   getTablePermissionType() {
     return TABLE_PERMISSION_TYPE;
   }
