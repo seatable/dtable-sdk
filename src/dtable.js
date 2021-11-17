@@ -438,7 +438,8 @@ class DTable {
   }
 
   getViewRowsColor(rows, view, table) {
-    return Views.getRowsColor(rows, view, table, this.dtableStore.value);
+    const { colors } = Views.getRowsColor(rows, view, table, this.dtableStore.value) || {};
+    return colors || {};
   }
   
   /**
