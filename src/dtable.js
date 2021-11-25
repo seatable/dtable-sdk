@@ -1,7 +1,8 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { DTableStore,
+import {
+  DTableStore,
   Views,
   TableUtils,
   RowUtils,
@@ -197,10 +198,8 @@ class DTable {
       return table.name === tableName
     });
     const selectedTable = tables[tableIndex];
-    const viewIndex = selectedTable.views.findIndex((view) => {
-      return view.name === viewName;
-    });
-    this.dtableStore.deleteView(tableIndex, viewIndex);
+    const view = Views.getViewByName(selectedTable.views, viewName);
+    this.dtableStore.deleteView(tableIndex, view._id);
   }
 
   renameView(tableName, previousName, viewName) {
@@ -210,15 +209,14 @@ class DTable {
     });
 
     const selectedTable = tables[index];
-
-    const viewIndex = selectedTable.views.findIndex((view) => {
-      return view.name === previousName;
-    });
-    this.dtableStore.renameView(index, viewIndex, viewName);
+    const view = Views.getViewByName(selectedTable.views, previousName);
+    this.dtableStore.renameView(index, view._id, viewName);
   }
 
   getViews(table) {
-    return table.views;
+    const tables = this.getTables();
+    const tableIndex = tables.findIndex(t => t.name === table.name);
+    return this.dtableStore.getCurrentUserViews(tableIndex);
   }
 
   getNonArchiveViews(table) {
@@ -229,8 +227,8 @@ class DTable {
   getActiveView() {
     let activeTable = this.getActiveTable();
     let views = this.getViews(activeTable);
-    let active_index = this.dtableStore.view_index;
-    return views[active_index] || views[0];
+    let active_id = this.dtableStore.view_id;
+    return Views.getViewById(views, active_id) || views[0];
   }
 
   getViewByName(table, view_name) {
