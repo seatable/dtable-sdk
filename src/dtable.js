@@ -214,9 +214,7 @@ class DTable {
   }
 
   getViews(table) {
-    const tables = this.getTables();
-    const tableIndex = tables.findIndex(t => t.name === table.name);
-    return this.dtableStore.getCurrentUserViews(tableIndex);
+    return Views.getNonPrivateViews(table.views);
   }
 
   getNonArchiveViews(table) {
