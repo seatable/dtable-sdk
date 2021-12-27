@@ -337,7 +337,7 @@ class DTable {
     this.dtableStore.modifyRow(tableIndex, row._id, newUpdated, null);
   }
 
-  forEachRow(tableName, viewName, callback, { username, userId } = {}) {
+  forEachRow(tableName, viewName, callback, { username, userId, convertLinkID } = {}) {
     let value = this.dtableStore.value;
     let tables = this.getTables();
     let table = TableUtils.getTableByName(tables, tableName);
@@ -352,14 +352,14 @@ class DTable {
     }
     const rows = this.getViewRows(view, table, username, userId);
 
-    const formulaColumns = Views.getAllFormulaColumns(Views.getColumns(view, table));
+    const formulaColumns = convertLinkID ? Views.getFormulaColumnsContainLinks(table) : Views.getAllFormulaColumns(Views.getColumns(view, table));
     let formulaResults = {};
     if (formulaColumns && formulaColumns.length > 0) {
       formulaResults = Views.getTableFormulaResults(table, rows, value, formulaColumns);
     }
 
     rows.forEach((row) => {
-      let newRow = RowUtils.convertRow(row, value, table, view, formulaResults);
+      let newRow = RowUtils.convertRow(row, value, table, view, formulaResults, convertLinkID);
       callback(newRow);
     });
   }
