@@ -6,11 +6,11 @@ import {
   isNumber, 
   CellType,
   FORMULA_RESULT_TYPE,
+  FORMULA_COLUMN_TYPES,
   sortText,
   sortNumber,
   sortDate,
   sortSingleSelect,
-  sortFormula,
   getPrecisionNumber,
   getFormulaDisplayString,
   getGeolocationDisplayString,
@@ -207,9 +207,10 @@ class StatUtils {
           let validNumbersCount = 0;
           rows.forEach(r => {
             let num;
-            if (summary_column_type === CellType.FORMULA) {
+            if (FORMULA_COLUMN_TYPES.includes(summary_column_type)) {
               let formulaRow = formula_rows[r._id] || {};
               num = formulaRow[summary_column_key];
+              num = Array.isArray(num) ? num[0] : num;
             } else {
               num = r[summary_column_key];
             }
@@ -233,11 +234,13 @@ class StatUtils {
           if (rowsLength > 0) {
             let result = rows.reduce((current, next) => {
               let currentValue, nextValue;
-              if (summary_column_type === CellType.FORMULA) {
-                let currentFormulaRow = formula_rows[current._id] || {};
-                let nextFormulaRow = formula_rows[next._id] || {};
-                currentValue = currentFormulaRow[summary_column_key];
-                nextValue = nextFormulaRow[summary_column_key];
+              if (FORMULA_COLUMN_TYPES.includes(summary_column_type)) {
+                let currentFormulaRow = formula_rows[current._id];
+                let nextFormulaRow = formula_rows[next._id];
+                currentValue = currentFormulaRow && currentFormulaRow[summary_column_key];
+                nextValue = nextFormulaRow && nextFormulaRow[summary_column_key];
+                currentValue = Array.isArray(currentValue) ? currentValue[0] : currentValue;
+                nextValue = Array.isArray(nextValue) ? nextValue[0] : nextValue;
               } else {
                 currentValue = current[summary_column_key];
                 nextValue = next[summary_column_key];
@@ -252,13 +255,10 @@ class StatUtils {
                 return isNextGreater ? next : current;
               }
             });
-            if (summary_column_type === CellType.FORMULA) {
+            if (FORMULA_COLUMN_TYPES.includes(summary_column_type)) {
               let formulaRow = formula_rows[result._id];
-              if (formulaRow) {
-                total = formulaRow[summary_column_key];
-              } else {
-                total = null;
-              }
+              total = formulaRow && formulaRow[summary_column_key];
+              total = Array.isArray(total) ? total[0] : total;
             } else {
               total = result[summary_column_key];
             }
@@ -324,7 +324,7 @@ class StatUtils {
               }
               return sortNumber(current, next, sortType);
             }
-            return sortFormula(result_type, current, next, sortType);
+            return sortText(result_type, current, next, sortType);
           }
           default: {
             return sortText(current, next, sortType);
