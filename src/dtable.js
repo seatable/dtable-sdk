@@ -313,11 +313,7 @@ class DTable {
   }
 
   deleteRowsByIds(table, row_ids) {
-    const tables = this.getTables();
-    const tableIndex = tables.findIndex(t => t._id === table._id);
-    const deleted_rows = this.getRowsByID(table._id, row_ids);
-    const upper_row_ids = [];
-    this.dtableStore.deleteRows(tableIndex, row_ids, deleted_rows, upper_row_ids);
+    this.dtableStore.deleteRowsByIds(table._id, row_ids);
   }
 
   modifyRow(table, row, updated) {
