@@ -253,12 +253,11 @@ class DTable {
     return table.columns;
   }
 
-  getShownColumns(table, view) {
-    let hidden_columns = view.hidden_columns;
-    let shownColumns = table.columns.filter(column => {
+  getViewColumns(table, view) {
+    const hidden_columns = view.hidden_columns;
+    return table.columns.filter(column => {
       return hidden_columns.indexOf(column.key) === -1;
     });
-    return shownColumns;
   }
 
   getColumnByName(table, name) {
