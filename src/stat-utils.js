@@ -52,13 +52,7 @@ const SUPPORT_SORT_COLUMNS = [
 class StatUtils {
 
   static getStatisticRows(table, view, value, username, userId) {
-    if (Views.isFilterView(view, table.columns)) {
-      return TableUtils.getRowsByIds(
-        table,
-        Views.getRowIds(view, table, value, username, userId)
-      );
-    }
-    return table.rows;
+    return Views.getViewRows(view, table, value, username, userId);
   }
 
   static isValidRow(row, formulaRow, linkRow, column, includeEmpty) {
