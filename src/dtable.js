@@ -253,7 +253,7 @@ class DTable {
     return table.columns;
   }
 
-  getViewShownColumns(table, view) {
+  getViewShownColumns(view, table) {
     return Views.getColumns(view, table);
   }
 
