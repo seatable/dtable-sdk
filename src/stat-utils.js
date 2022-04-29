@@ -57,7 +57,7 @@ class StatUtils {
 
   static isValidRow(row, formulaRow, linkRow, column, includeEmpty) {
     const { type: columnType, key: columnKey } = column;
-    if (includeEmpty) return true;
+    if (includeEmpty || columnType === CellType.CHECKBOX) return true;
     let cellValue;
     if (columnType === CellType.FORMULA || columnType === CellType.LINK_FORMULA) {
       cellValue = formulaRow ? formulaRow[columnKey] : null;
@@ -170,6 +170,9 @@ class StatUtils {
         if (!linkRow) return null;
         let linkCellValue = linkRow[key] || cellValue;
         return linkCellValue || [];
+      }
+      case CellType.CHECKBOX: {
+        return String(!!cellValue);
       }
       case CellType.RATE: {
         if (!cellValue) return null;
