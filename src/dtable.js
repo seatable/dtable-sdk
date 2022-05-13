@@ -423,11 +423,6 @@ class DTable {
   }
 
   getTableFormulaResults(table, rows) {
-    const formulaColumns = Views.getAllFormulaColumns(table.columns);
-    return Views.getTableFormulaResults(table, rows, this.dtableStore.value, formulaColumns);
-  }
-
-  getTableFormulaResultsContainerLinks(table, rows) {
     const formulaColumns = Views.getFormulaColumnsContainLinks(table);
     return Views.getTableFormulaResults(table, rows, this.dtableStore.value, formulaColumns);
   }
