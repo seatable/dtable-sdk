@@ -20,6 +20,7 @@ import {
   getLinkDisplayString,
   FORMULA_RESULT_TYPE,
   TABLE_PERMISSION_TYPE,
+  sortFormula,
 } from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
@@ -422,7 +423,7 @@ class DTable {
   }
 
   getTableFormulaResults(table, rows) {
-    const formulaColumns = Views.getAllFormulaColumns(table.columns);
+    const formulaColumns = Views.getFormulaColumnsContainLinks(table);
     return Views.getTableFormulaResults(table, rows, this.dtableStore.value, formulaColumns);
   }
 
@@ -514,6 +515,10 @@ class DTable {
 
   sqlQuery(sql) {
     return this.dtableStore.dtableAPI.sqlQuery(sql);
+  }
+
+  sortFormula(currCellVal, nextCellVal, sortType, { columnData, value }) {
+    return sortFormula(currCellVal, nextCellVal, sortType, { columnData, value })
   }
 
 }
