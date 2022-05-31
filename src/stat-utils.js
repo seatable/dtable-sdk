@@ -17,6 +17,7 @@ import {
   getDateDisplayString,
   getNumberDisplayString,
   getCellValueDisplayString,
+  getCellValueStringResult,
   getLinkDisplayString,
 } from 'dtable-store';
 
@@ -90,8 +91,15 @@ class StatUtils {
     return RowUtils.getTableLinkRows(rows, table, value);
   }
 
+  /**
+   * @Deprecated
+   */
   static getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
     return getCellValueDisplayString(row, type, key, {tables, formulaRows, data, collaborators});
+  }
+
+  static getCellValueStringResult(row, column, {formulaRows = {}, collaborators = [], isArchiveView = false} = {}) {
+    return getCellValueStringResult(row, column, {formulaRows, collaborators, isArchiveView });
   }
 
   static getGroupLabel(
