@@ -12,6 +12,7 @@ import {
   HIGHLIGHT_COLORS,
   COLUMNS_ICON_CONFIG,
   getCellValueDisplayString,
+  getCellValueStringResult,
   getNumberDisplayString,
   getGeolocationDisplayString,
   getDurationDisplayString,
@@ -484,8 +485,15 @@ class DTable {
     return this.dtableStore.getLinkCellValue(linkId, table1Id, table2Id, rowId);
   }
 
+   /**
+   * @Deprecated
+   */
   getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
     return getCellValueDisplayString(row, type, key, {tables, formulaRows, data, collaborators});
+  }
+
+  getCellValueStringResult(row, column, {formulaRows = {}, collaborators = [], isArchiveView = false} = {}) {
+    return getCellValueStringResult(row, column, {formulaRows, collaborators, isArchiveView });
   }
 
   getLinkDisplayString(rowIds, linkedTable, displayColumnKey = '0000') {
