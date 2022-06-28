@@ -23,6 +23,7 @@ import {
   sortFormula,
   getCellValueStringResult,
   getFormulaDisplayString,
+  LinksUtils,
 } from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
@@ -529,6 +530,14 @@ class DTable {
 
   sortFormula(currCellVal, nextCellVal, sortType, { columnData, value }) {
     return sortFormula(currCellVal, nextCellVal, sortType, { columnData, value })
+  }
+
+  getLinkTableID(currentTableId, table_id, other_table_id) {
+    return LinksUtils.getLinkTableID(currentTableId, table_id, other_table_id);
+  }
+
+  getLinkedTableID(currentTableId, table_id, other_table_id) {
+    return LinksUtils.getLinkedTableID(currentTableId, table_id, other_table_id);
   }
 
 }
