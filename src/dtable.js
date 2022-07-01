@@ -21,6 +21,8 @@ import {
   FORMULA_RESULT_TYPE,
   TABLE_PERMISSION_TYPE,
   sortFormula,
+  getCellValueStringResult,
+  getFormulaDisplayString,
 } from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
@@ -486,6 +488,14 @@ class DTable {
 
   getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
     return getCellValueDisplayString(row, type, key, {tables, formulaRows, data, collaborators});
+  }
+
+  getCellValueStringResult(row, column, { formulaRows = {}, collaborators = [], isArchiveView = false } = {}) {
+    return getCellValueStringResult(row, column, { formulaRows, collaborators, isArchiveView });
+  }
+
+  getFormulaDisplayString(cellValue, columnData, { tables = [] } = {}) {
+    return getFormulaDisplayString(cellValue, columnData, { tables });
   }
 
   getLinkDisplayString(rowIds, linkedTable, displayColumnKey = '0000') {
