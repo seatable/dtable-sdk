@@ -198,6 +198,33 @@ class StatUtils {
       total = rowsLength;
     } else if (summary_type === STATISTICS_COUNT_TYPE.ADVANCED) {
       switch (summary_method) {
+        case 'Distinct_values': {
+          let count = 0;
+          let existMap = {};
+          rows.forEach(r => {
+            let num;
+            if (FORMULA_COLUMN_TYPES.includes(summary_column_type)) {
+              const formulaRow = formula_rows[r._id] || {};
+              num = formulaRow[summary_column_key];
+              num = Array.isArray(num) ? num[0] : num;
+            } else {
+              num = r[summary_column_key];
+            }
+            if (!num) {
+              if (num === 0) {
+                num = '0';
+              } else {
+                num = !!num;
+              }
+            }
+            if (!existMap[num]) {
+              existMap[num] = true;
+              count++;
+            }
+          });
+          total = count;
+          break;
+        }
         case "Sum":
         case "Mean": {
           let sum = 0;
