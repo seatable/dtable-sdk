@@ -204,7 +204,7 @@ class StatUtils {
           rows.forEach(r => {
             let num;
             if (FORMULA_COLUMN_TYPES.includes(summary_column_type)) {
-              let formulaRow = formula_rows[r._id] || {};
+              const formulaRow = formula_rows[r._id] || {};
               num = formulaRow[summary_column_key];
               num = Array.isArray(num) ? num[0] : num;
             } else {
@@ -289,7 +289,6 @@ class StatUtils {
           }
           break;
         }
-        
         default: {
           break;
         }
