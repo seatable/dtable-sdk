@@ -487,6 +487,14 @@ class DTable {
     return this.dtableStore.getLinkCellValue(linkId, table1Id, table2Id, rowId);
   }
 
+  addLink = (linkId, tableId, otherTableId, rowId, otherRowId) => {
+    this.dtableStore.addLink(linkId, tableId, otherTableId, rowId, otherRowId);
+  }
+
+  removeLink = (linkId, tableId, otherTableId, rowId, otherRowId) => {
+    this.dtableStore.removeLink(linkId, tableId, otherTableId, rowId, otherRowId);
+  }
+
   getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
     return getCellValueDisplayString(row, type, key, {tables, formulaRows, data, collaborators});
   }
