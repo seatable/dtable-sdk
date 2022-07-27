@@ -13,6 +13,7 @@ import {
   COLUMNS_ICON_CONFIG,
   getCellValueDisplayString,
   getNumberDisplayString,
+  getMultipleOptionName,
   getGeolocationDisplayString,
   getDurationDisplayString,
   getCollaboratorsName,
