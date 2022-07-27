@@ -515,6 +515,10 @@ class DTable {
     return getNumberDisplayString(value, columnData);
   }
 
+  getMultipleOptionName(options, cellVal) {
+    return getMultipleOptionName(options, cellVal);
+  }
+
   getGeolocationDisplayString(value, columnData) {
     return getGeolocationDisplayString(value, columnData);
   }
