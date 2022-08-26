@@ -13,6 +13,7 @@ import {
   COLUMNS_ICON_CONFIG,
   getCellValueDisplayString,
   getNumberDisplayString,
+  getMultipleOptionName,
   getGeolocationDisplayString,
   getDurationDisplayString,
   getCollaboratorsName,
@@ -513,6 +514,10 @@ class DTable {
 
   getNumberDisplayString(value, columnData) {
     return getNumberDisplayString(value, columnData);
+  }
+
+  getMultipleOptionName(options, cellVal) {
+    return getMultipleOptionName(options, cellVal);
   }
 
   getGeolocationDisplayString(value, columnData) {
