@@ -7,6 +7,7 @@ import {
   SELECT_OPTION_COLORS,
   TABLE_PERMISSION_TYPE,
   formatDurationToNumber,
+  sortDate,
 } from 'dtable-store';
 import StatUtils from './stat-utils';
 
@@ -20,4 +21,5 @@ export {
   TABLE_PERMISSION_TYPE, 
   formatDurationToNumber,
   StatUtils, 
+  sortDate,
 };
