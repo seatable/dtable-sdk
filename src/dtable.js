@@ -563,6 +563,11 @@ class DTable {
     return LinksUtils.getLinkedTableID(currentTableId, table_id, other_table_id);
   }
 
+  getScripts = () => {
+    const { scripts } = this.dtableStore.value || { scripts: [] };
+    return scripts;
+  }
+
 }
 
 export default DTable;
