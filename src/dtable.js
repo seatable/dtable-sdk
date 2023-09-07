@@ -27,6 +27,7 @@ import {
   getCellValueStringResult,
   getFormulaDisplayString,
   LinksUtils,
+  MAX_GROUP_LEVEL,
 } from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
@@ -139,6 +140,7 @@ class DTable {
     });
   }
 
+  // table
   addTable(tableName) {
     this.dtableStore.insertTable(tableName);
   }
@@ -190,6 +192,7 @@ class DTable {
     return this.dtableStore.importDataIntoNewTable(table_name, columns, rows);
   }
 
+  // view
   addView(tableName, viewName) {
     const viewData = { name: viewName, type: 'table'};
     const tables = this.getTables();
@@ -256,6 +259,18 @@ class DTable {
     return Views.isFilterView(view, columns);
   }
 
+  addGroup(tableName, group) {
+    const table = this.getTableByName(tableName);
+    if (!table) return;
+    const tables = this.getTables();
+    const tableIndex = tables.findIndex(t => t._id === table._id);
+    if (tableIndex === -1) return;
+    const view = this.getActiveView();
+    if (view.groupbys && view.groupbys.length >= MAX_GROUP_LEVEL) return;
+    this.dtableStore.addGroup(tableIndex, group)
+  }
+
+  // columns
   getColumns(table) {
     return table.columns;
   }
@@ -276,6 +291,7 @@ class DTable {
     return this.getColumns(table).filter((item) => item.type === type);
   }
 
+  // modify column data
   modifyColumnData(table, columnName, columnData) {
     const tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
@@ -289,6 +305,7 @@ class DTable {
     this.dtableStore.setColumnData(tableIndex, updateColumn.key, columnData);
   }
 
+  // row
   addRow(tableName, rowData, viewName = null) {
     const table = this.getTableByName(tableName);
     let view = null;
@@ -411,6 +428,7 @@ class DTable {
     return this.dtableServerAPI.getRowCommentsCount(rowID);
   }
 
+  // plugin
   getPluginSettings(plugin_name) {
     let plugin_settings = this.dtableStore.value.plugin_settings || {};
     return plugin_settings[plugin_name] || null;
@@ -424,15 +442,18 @@ class DTable {
     this.dtableStore.deletePluginSettings(plugin_name);
   }
 
+  // statistic
   generatorStatId(statItems) {
     return generatorStatId(statItems);
   }
 
+  // formula
   getTableFormulaResults(table, rows) {
     const formulaColumns = Views.getFormulaColumnsContainLinks(table);
     return Views.getTableFormulaResults(table, rows, this.dtableStore.value, formulaColumns);
   }
 
+  // view rows color
   getViewRowsColor(rows, view, table) {
     const { colors } = Views.getRowsColor(rows, view, table, this.dtableStore.value) || {};
     return colors || {};
