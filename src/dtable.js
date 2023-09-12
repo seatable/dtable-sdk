@@ -267,6 +267,9 @@ class DTable {
     if (tableIndex === -1) return;
     const view = this.getActiveView();
     if (view.groupbys && view.groupbys.length >= MAX_GROUP_LEVEL) return;
+    if (!this.dtableStore.view_id) {
+      this.dtableStore.view_id = view._id;
+    }
     this.dtableStore.addGroup(tableIndex, group)
   }
 
