@@ -27,6 +27,7 @@ import {
   getCellValueStringResult,
   getFormulaDisplayString,
   LinksUtils,
+  formatTextToDate,
 } from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
@@ -287,6 +288,18 @@ class DTable {
       return;
     }
     this.dtableStore.setColumnData(tableIndex, updateColumn.key, columnData);
+  }
+
+  formatDate(value, format) {
+    const REG_CHINESE_DATE_FORMAT = /(\d{4})年(\d{1,2})月(\d{1,2})日(\d{1,2})?[:：分]?(\d{1,2})?秒?$/;
+    if (value.indexOf('年') > -1) {
+      let newCopiedCellVal = value.replace(/\s*/g, '');
+      if (!REG_CHINESE_DATE_FORMAT.test(newCopiedCellVal)) {
+        return '';
+      }
+      return formatTextToDate(newCopiedCellVal.replace(REG_CHINESE_DATE_FORMAT, '$1-$2-$3 $4:$5'), format);
+    }
+    return formatTextToDate(value, format);
   }
 
   addRow(tableName, rowData, viewName = null) {
