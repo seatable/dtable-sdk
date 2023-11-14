@@ -32,4 +32,4 @@ describe('utils test', () => {
     let formateDate = utils.formatDateWithMinutes(date);
     expect(formateDate).toBe('Invalid date');
   });
-})
+});

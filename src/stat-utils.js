@@ -1,13 +1,7 @@
 import {
   Views, 
   DateUtils,
-  isNumber, 
-  CellType,
   FORMULA_RESULT_TYPE,
-  sortText,
-  sortNumber,
-  sortDate,
-  sortSingleSelect,
   getPrecisionNumber,
   getFormulaDisplayString,
   getGeolocationDisplayString,
@@ -15,6 +9,14 @@ import {
   getNumberDisplayString,
   getCellValueDisplayString,
 } from 'dtable-store';
+import {
+  isNumber,
+  CellType,
+  sortText,
+  sortNumber,
+  sortDate,
+  sortSingleSelect,
+} from 'dtable-utils';
 
 const SUPPORT_SORT_COLUMNS = [
   CellType.TEXT, 
