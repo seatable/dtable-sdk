@@ -163,6 +163,10 @@ class DTable {
     return this.dtableStore.value.tables;
   }
 
+  getLinks() {
+    return this.dtableStore.value.links;
+  }
+
   getActiveTable() {
     let tables = this.getTables();
     return this.dtableStore.currentTable || tables[0];
@@ -437,7 +441,7 @@ class DTable {
     const { colors } = Views.getRowsColor(rows, view, table, this.dtableStore.value) || {};
     return colors || {};
   }
-  
+
   /**
    * @deprecated
    * @returns CellType
@@ -537,7 +541,7 @@ class DTable {
   getDurationDisplayString(value, columnData) {
     return getDurationDisplayString(value, columnData);
   }
-  
+
   getDateDisplayString(value, columnData) {
     const { format } = columnData;
     return getDateDisplayString(value, format);
