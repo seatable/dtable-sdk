@@ -80,6 +80,7 @@ class DTable {
   async syncWithServer() {
     await this.dtableStore.loadFromServer();
     await this.dtableStore.loadRelatedUsers();
+    await this.dtableStore.loadTableDepartments();
     this.dtableStore.syncWithServer();
     this.updateDTableAccessToken();
   }
