@@ -6,27 +6,6 @@ import {
   Views,
   TableUtils,
   RowUtils,
-  CellType,
-  generatorStatId,
-  SELECT_OPTION_COLORS,
-  HIGHLIGHT_COLORS,
-  COLUMNS_ICON_CONFIG,
-  getCellValueDisplayString,
-  getNumberDisplayString,
-  getOptionName,
-  getMultipleOptionName,
-  getLongtextDisplayString,
-  getGeolocationDisplayString,
-  getDurationDisplayString,
-  getCollaboratorsName,
-  getDateDisplayString,
-  getLinkDisplayString,
-  FORMULA_RESULT_TYPE,
-  TABLE_PERMISSION_TYPE,
-  sortFormula,
-  getCellValueStringResult,
-  getFormulaDisplayString,
-  LinksUtils,
 } from 'dtable-store';
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
@@ -100,11 +79,6 @@ class DTable {
     return this.eventBus.subscribe(eventType, fn);
   }
 
-  destory() {
-    this.dtableStore = null;
-    this.eventBus = null;
-  }
-
   getRelatedUsers() {
     return this.dtableStore.collaborators;
   }
@@ -173,16 +147,6 @@ class DTable {
     return this.dtableStore.currentTable || tables[0];
   }
 
-  getTableByName(name) {
-    let tables = this.getTables();
-    return TableUtils.getTableByName(tables, name);
-  }
-
-  getTableById(table_id) {
-    let tables = this.getTables();
-    return TableUtils.getTableById(tables, table_id);
-  }
-
   importDataIntoNewTable(table_name, columns, rows) {
     const tables = this.dtableStore.value.tables;
     if (tables.length >= 200) throw new Error('The_number_of_tables_exceeds_200_limit');
@@ -229,11 +193,6 @@ class DTable {
     return Views.getNonPrivateViews(table.views);
   }
 
-  getNonArchiveViews(table) {
-    const allViews = this.getViews(table);
-    return allViews.filter(view => !Views.isArchiveView(view));
-  }
-
   getActiveView() {
     let activeTable = this.getActiveTable();
     let views = this.getViews(activeTable);
@@ -241,44 +200,8 @@ class DTable {
     return Views.getViewById(views, active_id) || views[0];
   }
 
-  getViewByName(table, view_name) {
-    return Views.getViewByName(table.views, view_name);
-  }
-
-  getViewById(table, view_id) {
-    return Views.getViewById(table.views, view_id);
-  }
-
-  isGroupView(view, columns) {
-    return Views.isGroupView(view, columns);
-  }
-
-  isDefaultView(view, columns) {
-    return Views.isDefaultView(view, columns);
-  }
-
-  isFilterView(view, columns) {
-    return Views.isFilterView(view, columns);
-  }
-
   getColumns(table) {
     return table.columns;
-  }
-
-  getViewShownColumns(view, table) {
-    return Views.getColumns(view, table);
-  }
-
-  getColumnByName(table, name) {
-    return table.columns.find(column => column.name === name);
-  }
-
-  getColumnByKey(table, key) {
-    return table.columns.find(column => column.key === key);
-  }
-
-  getColumnsByType(table, type) {
-    return this.getColumns(table).filter((item) => item.type === type);
   }
 
   modifyColumnData(table, columnName, columnData) {
@@ -292,15 +215,6 @@ class DTable {
       return;
     }
     this.dtableStore.setColumnData(tableIndex, updateColumn.key, columnData);
-  }
-
-  addRow(tableName, rowData, viewName = null) {
-    const table = this.getTableByName(tableName);
-    let view = null;
-    if (viewName) {
-      view = this.getViewByName(table, viewName);
-    }
-    return this.appendRow(table, rowData, view);
   }
 
   appendRow(table, rowData, view, { collaborators } = {}) {
@@ -395,14 +309,6 @@ class DTable {
     return row_data;
   }
 
-  getRowsByID(tableId, rowIds) {
-    return this.dtableStore.getRowsByID(tableId, rowIds);
-  }
-
-  getRowById(table, rowId) {
-    return table.id_row_map[rowId];
-  }
-
   moveGroupRows(table, targetIds, movePosition, movedRows, upperRowIds, updated, oldRows, groupbyColumn) {
     const tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
@@ -412,10 +318,6 @@ class DTable {
     this.dtableStore.moveGroupRows(tableIndex, targetIds, movePosition, movedRows, upperRowIds, updated, oldRows, groupbyColumn)
   }
 
-  getRowCommentCount(rowID) {
-    return this.dtableServerAPI.getRowCommentsCount(rowID);
-  }
-
   getPluginSettings(plugin_name) {
     let plugin_settings = this.dtableStore.value.plugin_settings || {};
     return plugin_settings[plugin_name] || null;
@@ -423,14 +325,6 @@ class DTable {
 
   updatePluginSettings(plugin_name, plugin_settings) {
     this.dtableStore.updatePluginSettings(plugin_name, plugin_settings);
-  }
-
-  deletePluginSettings(plugin_name) {
-    this.dtableStore.deletePluginSettings(plugin_name);
-  }
-
-  generatorStatId(statItems) {
-    return generatorStatId(statItems);
   }
 
   getTableFormulaResults(table, rows) {
@@ -443,129 +337,12 @@ class DTable {
     return colors || {};
   }
 
-  /**
-   * @deprecated
-   * @returns CellType
-   */
-  getCellType() {
-    return CellType;
-  }
-
-  /**
-   * @deprecated
-   * @returns FORMULA_RESULT_TYPE
-   */
-  getFormulaResultType() {
-    return FORMULA_RESULT_TYPE;
-  }
-
-  /**
-   * @deprecated
-   * @returns COLUMNS_ICON_CONFIG
-   */
-  getColumnIconConfig() {
-    return COLUMNS_ICON_CONFIG;
-  }
-
-  /**
-   * @deprecated
-   * @returns SELECT_OPTION_COLORS
-   */
-  getOptionColors() {
-    return SELECT_OPTION_COLORS;
-  }
-
-  /**
-   * @deprecated
-   * @returns HIGHLIGHT_COLORS
-   */
-  getHighlightColors() {
-    return HIGHLIGHT_COLORS;
-  }
-
-  /**
-   * @deprecated
-   * @returns TABLE_PERMISSION_TYPE
-   */
-  getTablePermissionType() {
-    return TABLE_PERMISSION_TYPE;
-  }
-
-  getLinkCellValue(linkId, table1Id, table2Id, rowId) {
-    return this.dtableStore.getLinkCellValue(linkId, table1Id, table2Id, rowId);
-  }
-
   addLink = (linkId, tableId, otherTableId, rowId, otherRowId) => {
     this.dtableStore.addLink(linkId, tableId, otherTableId, rowId, otherRowId);
   }
 
   removeLink = (linkId, tableId, otherTableId, rowId, otherRowId) => {
     this.dtableStore.removeLink(linkId, tableId, otherTableId, rowId, otherRowId);
-  }
-
-  getCellValueDisplayString(row, type, key, {tables = [], formulaRows = {}, data, collaborators = []}) {
-    return getCellValueDisplayString(row, type, key, {tables, formulaRows, data, collaborators});
-  }
-
-  getCellValueStringResult(row, column, { formulaRows = {}, collaborators = [], isArchiveView = false } = {}) {
-    return getCellValueStringResult(row, column, { formulaRows, collaborators, isArchiveView });
-  }
-
-  getFormulaDisplayString(cellValue, columnData, { tables = [] } = {}) {
-    return getFormulaDisplayString(cellValue, columnData, { tables });
-  }
-
-  getLinkDisplayString(rowIds, linkedTable, displayColumnKey = '0000') {
-    return getLinkDisplayString(rowIds, linkedTable, displayColumnKey);
-  }
-
-  getNumberDisplayString(value, columnData) {
-    return getNumberDisplayString(value, columnData);
-  }
-
-  getOptionName(options, cellVal) {
-    return getOptionName(options, cellVal);
-  }
-
-  getMultipleOptionName(options, cellVal) {
-    return getMultipleOptionName(options, cellVal);
-  }
-
-  getLongtextDisplayString(cellVal) {
-    return getLongtextDisplayString(cellVal);
-  }
-
-  getGeolocationDisplayString(value, columnData) {
-    return getGeolocationDisplayString(value, columnData);
-  }
-
-  getDurationDisplayString(value, columnData) {
-    return getDurationDisplayString(value, columnData);
-  }
-
-  getDateDisplayString(value, columnData) {
-    const { format } = columnData;
-    return getDateDisplayString(value, format);
-  }
-
-  getCollaboratorsName(collaborators, value) {
-    return getCollaboratorsName(collaborators, value);
-  }
-
-  sqlQuery(sql) {
-    return this.dtableStore.dtableAPI.sqlQuery(sql);
-  }
-
-  sortFormula(currCellVal, nextCellVal, sortType, { columnData, value }) {
-    return sortFormula(currCellVal, nextCellVal, sortType, { columnData, value })
-  }
-
-  getLinkTableID(currentTableId, table_id, other_table_id) {
-    return LinksUtils.getLinkTableID(currentTableId, table_id, other_table_id);
-  }
-
-  getLinkedTableID(currentTableId, table_id, other_table_id) {
-    return LinksUtils.getLinkedTableID(currentTableId, table_id, other_table_id);
   }
 
   getScripts = () => {
