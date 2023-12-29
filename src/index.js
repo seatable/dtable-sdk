@@ -13,5 +13,4 @@ export {
   FILTER_PREDICATE_TYPE, FORMULA_RESULT_TYPE, SELECT_OPTION_COLORS, TABLE_PERMISSION_TYPE,
   formatDurationToNumber, formatStringToNumber, filterRow, getValidFilters, getNumberDisplayString,
   replaceNumberNotAllowInput, sortDate, getValidSorts, sortTableRows,
-  StatUtils,
 };
