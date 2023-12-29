@@ -6,7 +6,6 @@ import {
   getValidFilters, getNumberDisplayString, replaceNumberNotAllowInput, sortDate, getValidSorts,
   sortTableRows
 } from 'dtable-store';
-import StatUtils from './stat-utils';
 
 export default Dtable;
 export {
