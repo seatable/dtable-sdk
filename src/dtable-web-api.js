@@ -22,6 +22,16 @@ class DTableWebAPI {
     });
   }
 
+  _sendPostRequest(url, form) {
+    if (form.getHeaders) {
+      return this.req.post(url, form, {
+        headers: form.getHeaders()
+      });
+    } else {
+      return this.req.post(url, form);
+    }
+  }
+
   getDTableAccessToken() {
     const { server, APIToken } = this.config;
     const url = server + '/api/v2.1/dtable/app-access-token/';
@@ -84,6 +94,33 @@ class DTableWebAPI {
     const { server } = this.config;
     let url = server + '/api/v2.1/dtable-io-status/?task_id=' + taskId;
     return this.req.get(url);
+  }
+
+  exportPageDesignPage(workspaceId, name, pageId) {
+    const { server } = this.config;
+    const url = server + `/api/v2.1/workspace/${workspaceId}/dtable/${name}/page-design-export/`;
+    let form = new FormData();
+    form.append('page_id', pageId);
+    return this._sendPostRequest(url, form);
+  }
+
+  downloadExportedPageDesignPage(workspaceId, name, pageId, taskId) {
+    const { server } = this.config;
+    const url = server + `/api/v2.1/workspace/${workspaceId}/dtable/${name}/page-design-export-content/`;
+    return this.req.get(url, {
+      params: {
+        page_id: pageId,
+        task_id: taskId
+      }
+    });
+  }
+
+  importPageDesignPage(workspaceId, name, pageDesignFile) {
+    const { server } = this.config;
+    const url = server + `/api/v2.1/workspace/${workspaceId}/dtable/${name}/page-design-export/`;
+    let form = new FormData();
+    form.append('page_design_file', pageDesignFile);
+    return this._sendPostRequest(url, form);
   }
 
 }
