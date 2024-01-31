@@ -104,17 +104,6 @@ class DTableWebAPI {
     return this._sendPostRequest(url, form);
   }
 
-  downloadExportedPageDesignPage(workspaceId, name, pageId, taskId) {
-    const { server } = this.config;
-    const url = server + `/api/v2.1/workspace/${workspaceId}/dtable/${name}/page-design-export-content/`;
-    return this.req.get(url, {
-      params: {
-        page_id: pageId,
-        task_id: taskId
-      }
-    });
-  }
-
   importPageDesignPage(workspaceId, name, pageDesignFile) {
     const { server } = this.config;
     const url = server + `/api/v2.1/workspace/${workspaceId}/dtable/${name}/page-design-export/`;
