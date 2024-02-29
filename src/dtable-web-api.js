@@ -43,6 +43,12 @@ class DTableWebAPI {
     return this.req.get(url);
   }
 
+  getCustomAssetUploadLink(parentDir) {
+    const { server, dtableUuid } = this.config;
+    const url = server + '/api/v2.1/dtable-custom-asset/' + dtableUuid + '/upload-link/?parent_dir=' + encodeURIComponent(parentDir);
+    return this.req.get(url);
+  }
+
   uploadImage(uploadLink, formData, onUploadProgress = null) {
     return (
       axios.create()({
