@@ -114,6 +114,19 @@ class DTable {
     });
   }
 
+  saveImageToCustomFolder = (imageBlob, path, callback) => {
+    this.dtableWebAPI.getCustomAssetUploadLink(path).then(res => {
+      const { upload_link, parent_path, relative_path } = res.data;
+      const formData = new FormData();
+      formData.append('parent_dir', parent_path);
+      formData.append('relative_path', relative_path);
+      formData.append('file', imageBlob);
+      this.dtableWebAPI.uploadImage(upload_link + '?ret-json=1', formData, (event) => {
+        callback && callback(event);
+      });
+    });
+  }
+
   addTable(tableName) {
     this.dtableStore.insertTable(tableName);
   }
