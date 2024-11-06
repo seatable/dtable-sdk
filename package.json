@@ -23,8 +23,8 @@
     "form-data": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.0",
+    "@babel/cli": "7.22.15",
+    "@babel/core": "^7.23.2",
     "@babel/node": "^7.5.0",
     "@babel/plugin-proposal-class-properties": "^7.5.0",
     "@babel/plugin-transform-modules-commonjs": "^7.5.0",
