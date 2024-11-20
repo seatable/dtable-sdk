@@ -2,7 +2,7 @@
 
 JavaScript SDK for SeaTable (DTable is an old name).
 
-## Adding to your poject
+## Adding to your project
 
 Using npm:
 
