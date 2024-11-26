@@ -57,7 +57,7 @@ class DTable {
   }
 
   async syncWithServer() {
-    await this.dtableStore.loadFromServer();
+    await this.dtableStore.loadDTable();
     await this.dtableStore.loadRelatedUsers();
     await this.dtableStore.loadTableDepartments();
     this.dtableStore.syncWithServer();
@@ -300,8 +300,8 @@ class DTable {
   }
 
   getViewRows(view, table) {
-    const { username = null, userId = null } = this.dtableStore.dtableSettings;
-    return Views.getViewRows(view, table, this.dtableStore.value, username, userId);
+    const { username = null, userId = null, userDepartmentIdsMap = null } = this.dtableStore.dtableSettings;
+    return Views.getViewRows(view, table, this.dtableStore.value, username, userId, userDepartmentIdsMap);
   }
 
   getGroupRows(view, table) {
