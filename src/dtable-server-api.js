@@ -1,12 +1,10 @@
 import axios from 'axios';
-import DTableAPIProxy from './dtable-server-proxy-api';
 
 class DTableServerAPI {
 
   constructor(config) {
     this.req = axios.create();
     this.config = config;
-    this.dtableAPIProxy = new DTableAPIProxy(this.config.server, this.config.dtableUuid, this.config.accessToken);
   }
 
   getTableData() {
@@ -25,14 +23,6 @@ class DTableServerAPI {
       headers: { 'Authorization': 'Token ' + accessToken },
       params: params
     });
-  }
-
-  getTableRelatedUsers() {
-    return this.dtableAPIProxy.getTableRelatedUsers();
-  }
-
-  getTableDepartments() {
-    return this.dtableAPIProxy.getTableDepartments();
   }
 
 }
