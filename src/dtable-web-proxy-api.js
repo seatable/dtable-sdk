@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-class DTableAPIProxy {
+class DTableWebProxyAPI {
 
-  constructor(server, dtableUuid, accessToken) {
+  constructor({ server, dtableUuid, accessToken }) {
     this.server = server && server.replace(/\/+$/, '') + '/';
     this.dtableUuid = dtableUuid;
     this.accessToken = accessToken;
@@ -22,4 +22,4 @@ class DTableAPIProxy {
   }
 }
 
-export default DTableAPIProxy;
+export default DTableWebProxyAPI;

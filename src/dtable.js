@@ -10,6 +10,7 @@ import {
 import Debug from 'debug';
 import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
+import DTableWebProxyAPI from './dtable-web-proxy-api';
 import Utils from './utils';
 
 const debug = Debug('dtable:sdk');
@@ -22,6 +23,7 @@ class DTable {
     this.dtableStore = null;
     this.eventBus = null;
     this.dtableWebAPI = null;
+    this.dtableWebProxyAPI = null;
     this.dtableServerAPI = null;
     this.utils = new Utils();
   }
@@ -39,6 +41,7 @@ class DTable {
       this.config.dtableServer = dtable_server.replace(/\/+$/, '') + '/';
       this.config.dtableSocket = dtable_socket.replace(/\/+$/, '') + '/';
       this.dtableServerAPI = new DTableServerAPI(this.config);
+      this.dtableWebProxyAPI = new DTableWebProxyAPI(this.config);
       this.dtableStore = new DTableStore(this.config);
       this.eventBus = this.dtableStore.eventBus;
     } catch (err) {
@@ -58,7 +61,7 @@ class DTable {
 
   initRelatedUsers = async () => {
     // init dtable collaborators
-    const res = await this.dtableServerAPI.getTableRelatedUsers();
+    const res = await this.dtableWebProxyAPI.getTableRelatedUsers();
     if (res && res.data) {
       const { user_list, app_user_list } = res.data;
       this.dtableStore.initRelatedUsers({ user_list, app_user_list });
@@ -67,7 +70,7 @@ class DTable {
 
   initDepartments = async () => {
     // init dtable departments
-    const res = await this.dtableServerAPI.getTableDepartments();
+    const res = await this.dtableWebProxyAPI.getTableDepartments();
     if (res && res.data) {
       const { departments } = res.data;
       this.dtableStore.initDepartments(departments);
