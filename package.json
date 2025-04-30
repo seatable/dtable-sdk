@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "axios": "~1.8.*",
-    "dtable-store": "5.3.2",
+    "dtable-store": "5.3.8",
     "form-data": "^3.0.0"
   },
   "devDependencies": {
