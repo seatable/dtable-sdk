@@ -42,7 +42,11 @@ class DTable {
       this.config.dtableSocket = dtable_socket.replace(/\/+$/, '') + '/';
       this.dtableServerAPI = new DTableServerAPI(this.config);
       this.dtableWebProxyAPI = new DTableWebProxyAPI(this.config);
-      this.dtableStore = new DTableStore(this.config);
+      this.dtableStore = new DTableStore({
+        ...this.config,
+        loadDtableFromAPIGateway: true,
+        enableAPIGatewayProxySocket: true,
+      });
       this.eventBus = this.dtableStore.eventBus;
     } catch (err) {
       console.log(err);
