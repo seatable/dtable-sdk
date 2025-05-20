@@ -8,7 +8,6 @@ import {
   RowUtils,
 } from 'dtable-store';
 import Debug from 'debug';
-import DTableServerAPI from './dtable-server-api';
 import DTableWebAPI from './dtable-web-api';
 import DTableWebProxyAPI from './dtable-web-proxy-api';
 import Utils from './utils';
@@ -24,7 +23,6 @@ class DTable {
     this.eventBus = null;
     this.dtableWebAPI = null;
     this.dtableWebProxyAPI = null;
-    this.dtableServerAPI = null;
     this.utils = new Utils();
   }
 
@@ -34,13 +32,10 @@ class DTable {
 
     try {
       let res = await this.dtableWebAPI.getDTableAccessToken();
-      const { app_name, access_token, dtable_uuid, dtable_server, dtable_socket } = res.data;
+      const { app_name, access_token, dtable_uuid } = res.data;
       this.config.appName = app_name;
       this.config.accessToken = access_token;
       this.config.dtableUuid = dtable_uuid;
-      this.config.dtableServer = dtable_server.replace(/\/+$/, '') + '/';
-      this.config.dtableSocket = dtable_socket.replace(/\/+$/, '') + '/';
-      this.dtableServerAPI = new DTableServerAPI(this.config);
       this.dtableWebProxyAPI = new DTableWebProxyAPI(this.config);
       this.dtableStore = new DTableStore({
         ...this.config,
@@ -59,8 +54,6 @@ class DTable {
     this.eventBus = this.dtableStore.eventBus;
 
     this.config = {};
-    this.dtableServerAPI = null;
-
   }
 
   initRelatedUsers = async () => {
