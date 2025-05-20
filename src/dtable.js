@@ -37,11 +37,7 @@ class DTable {
       this.config.accessToken = access_token;
       this.config.dtableUuid = dtable_uuid;
       this.dtableWebProxyAPI = new DTableWebProxyAPI(this.config);
-      this.dtableStore = new DTableStore({
-        ...this.config,
-        loadDtableFromAPIGateway: true,
-        enableAPIGatewayProxySocket: true,
-      });
+      this.dtableStore = new DTableStore(this.config);
       this.eventBus = this.dtableStore.eventBus;
     } catch (err) {
       console.log(err);
