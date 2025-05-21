@@ -1,6 +1,6 @@
 {
   "name": "dtable-sdk",
-  "version": "5.0.9",
+  "version": "5.0.10",
   "description": "dtable sdk",
   "main": "./dist/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "axios": "~1.8.*",
-    "dtable-store": "5.3.8",
+    "dtable-store": "5.3.9",
     "form-data": "^3.0.0"
   },
   "devDependencies": {
