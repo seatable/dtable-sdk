@@ -216,6 +216,14 @@ class DTable {
     this.dtableStore.renameView(index, view._id, viewName);
   }
 
+  migratePluginView(tableName, viewData) {
+    const tables = this.getTables();
+    const index = tables.findIndex((table) => {
+      return table.name === tableName;
+    });
+    this.dtableStore.insertView(index, viewData);
+  }
+
   getViews(table) {
     return Views.getNonPrivateViews(table.views);
   }
