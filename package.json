@@ -18,7 +18,7 @@
     "package-lock.json"
   ],
   "dependencies": {
-    "axios": "~1.11.*",
+    "axios": "~1.12.*",
     "dtable-store": "^6.0.6",
     "form-data": "^4.0.4"
   },
