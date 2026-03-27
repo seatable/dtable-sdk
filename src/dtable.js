@@ -252,13 +252,13 @@ class DTable {
     this.dtableStore.setColumnData(tableIndex, updateColumn.key, columnData);
   }
 
-  appendRow(table, rowData, view, { collaborators } = {}) {
+  appendRow(table, rowData, view, { collaborators } = {}, needConvertDate = true) {
     let tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
     if (tableIndex === -1) {
       return;
     }
-    let newRowData = RowUtils.convertRowBack(rowData, table, collaborators);
+    let newRowData = RowUtils.convertRowBack(rowData, table, collaborators, needConvertDate);
     const rows = view ? this.getViewRows(view, table) : table.rows;
     const lastRow = rows.length === 0 ? null : rows[rows.length - 1];
     let rowId = lastRow ? lastRow._id : '';
@@ -273,13 +273,13 @@ class DTable {
     this.dtableStore.deleteRowsByIds(table._id, row_ids);
   }
 
-  modifyRow(table, row, updated) {
+  modifyRow(table, row, updated, needConvertDate = true) {
     let tables = this.getTables();
     let tableIndex = tables.findIndex(t => t._id === table._id);
     if (tableIndex === -1) {
       return;
     }
-    let newUpdated = RowUtils.convertRowBack(updated, table);
+    let newUpdated = RowUtils.convertRowBack(updated, table, null, needConvertDate);
     let oldData = {};
     Object.keys(newUpdated).forEach(key => {
       oldData[key] = row[key];
