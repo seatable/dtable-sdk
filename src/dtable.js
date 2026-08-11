@@ -287,7 +287,7 @@ class DTable {
     if (JSON.stringify(oldData) === JSON.stringify(newUpdated)) {
       return;
     }
-    this.dtableStore.modifyRow(tableIndex, row._id, newUpdated, null);
+    this.dtableStore.modifyRow(tableIndex, row._id, newUpdated, oldData);
   }
 
   forEachRow(tableName, viewName, callback, { convertLinkID } = {}) {
