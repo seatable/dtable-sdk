@@ -3,7 +3,7 @@ import axios from 'axios';
 class DTableWebProxyAPI {
 
   constructor({ server, dtableUuid, accessToken }) {
-    this.server = server && server.replace(/\/+$/, '') + '/';
+    this.server = server && server.replace(/(^|[^/])\/+$/, '$1') + '/';
     this.dtableUuid = dtableUuid;
     this.accessToken = accessToken;
     this.req = axios.create();
