@@ -29,9 +29,15 @@
     "@babel/plugin-transform-modules-commonjs": "^7.5.0",
     "@babel/preset-env": "^7.23.2",
     "@babel/register": "^7.4.4",
-    "babel-register": "^6.26.0",
     "debug": "^4.1.1",
     "jest": "^30.3.0"
+  },
+  "overrides": {
+    "glob@>=9.0.0 <14.0.2": "14.0.2",
+    "minimatch@>=7.0.0 <11.0.1": "11.0.9",
+    "slugid": {
+      "uuid": "11.1.1"
+    }
   },
   "jest": {
     "testRegex": "/test/.*.test.jsx?$"
